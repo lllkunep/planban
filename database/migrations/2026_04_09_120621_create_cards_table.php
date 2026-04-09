@@ -16,6 +16,10 @@ return new class extends Migration
             $table->foreignId('column_id')
                 ->constrained()
                 ->cascadeOnDelete();
+            $table->foreignId('assigned_user_id')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
             $table->foreignId('after_card_id')
                 ->nullable()
                 ->constrained('cards')

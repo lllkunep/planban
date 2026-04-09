@@ -32,4 +32,9 @@ class Card extends Model
         return $this->belongsToMany(Tag::class)
             ->withTimestamps();
     }
+
+    public function assignedUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_user_id');
+    }
 }
