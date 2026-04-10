@@ -17,7 +17,7 @@ trait ChecksBoardMembership {
     {
         return $board->members()
             ->where('user_id', $user->id)
-            ->where('role', 'admin')
+            ->whereIn('role', ['owner', 'admin'])
             ->exists();
     }
 
@@ -25,7 +25,6 @@ trait ChecksBoardMembership {
     {
         return $board->members()
             ->where('user_id', $user->id)
-            ->where('role', 'member')
             ->exists();
     }
 }
