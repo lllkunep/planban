@@ -19,6 +19,9 @@ return new class extends Migration
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
+            $table->timestamp('last_active')->nullable();
+            $table->enum('role', ['owner', 'admin', 'member'])
+                ->default('member');
             $table->timestamps();
             $table->unique(['board_id', 'user_id']);
         });

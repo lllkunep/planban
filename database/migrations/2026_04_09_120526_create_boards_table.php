@@ -13,9 +13,6 @@ return new class extends Migration
     {
         Schema::create('boards', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_user_id')
-                ->constrained('users')
-                ->cascadeOnDelete();
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();
