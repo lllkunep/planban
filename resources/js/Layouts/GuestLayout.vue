@@ -1,22 +1,34 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link } from '@inertiajs/vue3';
+import BNavLink from "../Components/Bootstrap/BNavLink.vue";
 </script>
 
 <template>
-    <div
-        class="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0"
-    >
-        <div>
+    <nav class="navbar navbar-expand-sm bg-body-tertiary">
+        <div class="container-sm">
             <Link href="/">
-                <ApplicationLogo class="h-20 w-20 fill-current text-gray-500" />
+                <ApplicationLogo
+                    width="30" height="24"
+                />
             </Link>
+            <div class="d-flex">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <BNavLink
+                        :href="route('login')"
+                        :active="route().current('login')"
+                    >
+                        Login
+                    </BNavLink>
+                    <BNavLink
+                        :href="route('register')"
+                        :active="route().current('register')"
+                    >
+                        Register
+                    </BNavLink>
+                </ul>
+            </div>
         </div>
-
-        <div
-            class="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg"
-        >
-            <slot />
-        </div>
-    </div>
+    </nav>
+    <slot />
 </template>

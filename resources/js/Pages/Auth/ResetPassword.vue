@@ -1,10 +1,8 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import BButton from "@/Components/Bootstrap/BButton.vue";
+import BFormField from "@/Components/Bootstrap/BFormField.vue";
 
 const props = defineProps({
     email: {
@@ -35,67 +33,47 @@ const submit = () => {
     <GuestLayout>
         <Head title="Reset Password" />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+        <div class="container-sm py-5">
+            <div class="row justify-content-sm-center">
+                <div class="col-12 col-sm-6 py-4 px-4 rounded bg-secondary-subtle">
+                    <h2>Reset Password</h2>
+                    <form @submit.prevent="submit">
+                        <BFormField
+                            id="email"
+                            type="email"
+                            v-model="form.email"
+                            required
+                            autofocus
+                            autocomplete="username"
+                            label="Email"
+                            :message="form.errors.email"
+                        />
+                        <BFormField
+                            id="password"
+                            type="password"
+                            v-model="form.password"
+                            required
+                            autocomplete="new-password"
+                            label="Password"
+                            :message="form.errors.password"
+                        />
+                        <BFormField
+                            id="password_confirmation"
+                            type="password"
+                            v-model="form.password_confirmation"
+                            required
+                            autocomplete="new-password"
+                            label="Confirm Password"
+                            :message="form.errors.password_confirmation"
+                        />
+                        <BButton
+                            variant="primary"
+                            text="Reset Password"
+                            :disabled="form.processing"
+                        />
+                    </form>
+                </div>
             </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <PrimaryButton
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Reset Password
-                </PrimaryButton>
-            </div>
-        </form>
+        </div>
     </GuestLayout>
 </template>
