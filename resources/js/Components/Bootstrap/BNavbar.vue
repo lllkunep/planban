@@ -6,6 +6,7 @@ import {Link} from "@inertiajs/vue3";
 
 <template>
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
+        <slot name="sidebar-toggler" />
         <div class="container-sm">
             <Link :href="route('dashboard')">
                 <ApplicationLogo

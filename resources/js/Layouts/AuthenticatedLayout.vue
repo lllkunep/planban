@@ -7,6 +7,9 @@ import BDropdownLink from "@/Components/Bootstrap/BDropdownLink.vue";
 
 <template>
     <BNavbar>
+        <template #sidebar-toggler>
+            <slot name="sidebar-toggler" />
+        </template>
         <template #nav-items>
             <BNavLink
                 :href="route('dashboard')"

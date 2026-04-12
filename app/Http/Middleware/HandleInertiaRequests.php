@@ -34,6 +34,12 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+
+            'boards' => function () use ($request) {
+                if (!$request->user()) return [];
+
+                return $request->user()->assignedBoards()->orderBy('last_active', 'desc')->get();
+            },
         ];
     }
 }

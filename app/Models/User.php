@@ -49,11 +49,6 @@ class User extends Authenticatable
         ];
     }
 
-    public function boards(): HasMany
-    {
-        return $this->hasMany(Board::class, 'owner_user_id');
-    }
-
     public function assignedBoards(): BelongsToMany
     {
         return $this->belongsToMany(Board::class)
