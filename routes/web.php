@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -28,6 +29,9 @@ Route::middleware('auth')->group(function () {
 
     Route::patch('/cards/{card}/move', [CardController::class, 'move'])
         ->name('cards.move');
+
+    Route::patch('/columns/{column}/move', [ColumnController::class, 'move'])
+        ->name('columns.move');
 });
 
 require __DIR__.'/auth.php';

@@ -35,16 +35,19 @@ class DatabaseSeeder extends Seeder
         $col1 = Column::create([
             'board_id'        => $board1->id,
             'name'            => 'To do',
+            'position'        => 0,
         ]);
 
         $col2 = Column::create([
             'board_id'        => $board1->id,
             'name'            => 'In process',
+            'position'        => 1,
         ]);
 
         $col3 = Column::create([
             'board_id'        => $board1->id,
             'name'            => 'Done',
+            'position'        => 2,
         ]);
 
         $card1 = Card::create([
@@ -86,11 +89,13 @@ class DatabaseSeeder extends Seeder
         $col4 = Column::create([
             'board_id'        => $board2->id,
             'name'            => 'Сделать',
+            'position'        => 0,
         ]);
 
         $col5 = Column::create([
             'board_id'        => $board2->id,
             'name'            => 'Сделано',
+            'position'        => 1,
         ]);
 
         $card6 = Card::create([

@@ -31,12 +31,15 @@ function handleChange(event) {
     <div class="flex-shrink-0" style="width: 280px">
 
         <div class="d-flex justify-content-between align-items-center
-                    bg-light rounded-top p-2">
+                    bg-light rounded-top p-2 column-handle"
+             style="cursor: grab">
             <input
                 class="form-control form-control-sm border-0 bg-transparent fw-bold"
                 :value="column.name"
+                style="cursor: text"
+                @mousedown.stop
             />
-            <button class="btn btn-sm btn-link text-muted">✕</button>
+            <button class="btn btn-sm btn-link text-muted" @mousedown.stop>✕</button>
         </div>
 
         <draggable
