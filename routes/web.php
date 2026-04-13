@@ -27,8 +27,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/boards/{board}', [BoardController::class, 'show'])
         ->name('boards.show');
 
+    Route::get('/cards/{card}', [CardController::class, 'show'])
+        ->name('cards.show');
+
     Route::post('/cards', [CardController::class, 'store'])
         ->name('cards.store');
+
+    Route::patch('/cards/{card}/edit', [CardController::class, 'update'])
+        ->name('cards.update');
 
     Route::patch('/cards/{card}/move', [CardController::class, 'move'])
         ->name('cards.move');

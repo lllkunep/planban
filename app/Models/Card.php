@@ -25,7 +25,7 @@ class Card extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function history(): HasMany
+    public function histories(): HasMany
     {
         return $this->hasMany(History::class);
     }

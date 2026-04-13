@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Board;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -39,6 +40,26 @@ class HandleInertiaRequests extends Middleware
                 if (!$request->user()) return [];
 
                 return $request->user()->assignedBoards()->orderBy('last_active', 'desc')->get();
+            },
+
+            'currentBoard' => function () use ($request) {
+                if (!$request->user()) return null;
+
+                $board = $request->route('board');
+
+                if (!$board instanceof Board) return null;
+
+                if (!$request->user()->can('view', $board)) return null;
+
+                $board->loadMissing([
+                    'members:id,name,email',
+                    'tags:id,board_id,name,color',
+                ]);
+
+                return [
+                    'boardMembers' => $board->members,
+                    'boardTags'    => $board->tags,
+                ];
             },
         ];
     }

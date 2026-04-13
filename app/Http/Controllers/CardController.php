@@ -4,11 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Card;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CardController extends Controller
 {
+    public function show(Card $card): JsonResponse
+    {
+        $card->load(['assignedUser', 'tags', 'comments.user', 'histories.user']);
+
+        return response()->json($card);
+    }
+
     public function store(Request $request): JsonResponse
     {
         $data = $request->validate([
@@ -25,6 +33,31 @@ class CardController extends Controller
         ]);
 
         return response()->json($card, 201);
+    }
+
+    public function update(Request $request, Card $card): RedirectResponse
+    {
+        $this->authorize('update', $card);
+
+        $validated = $request->validate([
+            'name'             => 'sometimes|string|max:255',
+            'text'             => 'sometimes|string|nullable',
+            'assigned_user_id' => 'sometimes|nullable|exists:users,id',
+            'tags'             => 'sometimes|array',
+            'tags.*'           => 'exists:tags,id',
+        ]);
+
+        $card->update([
+            'name'             => $validated['name'] ?? $card->name,
+            'text'             => $validated['text'] ?? $card->text,
+            'assigned_user_id' => $validated['assigned_user_id'] ?? $card->assigned_user_id,
+        ]);
+
+        if (isset($validated['tags'])) {
+            $card->tags()->sync($validated['tags']);
+        }
+
+        return back();
     }
 
     public function move(Request $request, Card $card): JsonResponse

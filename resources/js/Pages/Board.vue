@@ -5,6 +5,7 @@ import axios from 'axios'
 import draggable from 'vuedraggable'
 import BoardLayout from '@/Layouts/BoardLayout.vue'
 import Column from '@/Components/Column.vue'
+import CardSidebar from '@/Components/CardSidebar.vue'
 
 const props = defineProps({
     board: {
@@ -25,6 +26,21 @@ function handleColumnChange(event) {
 
     axios.patch(route('columns.move', item.element.id), { position: item.newIndex })
 }
+
+const selectedCard = ref(null)
+const sidebarLoading = ref(false)
+
+async function openCard(card) {
+    selectedCard.value = card
+    sidebarLoading.value = true
+    const { data } = await axios.get(route('cards.show', card.id))
+    selectedCard.value = data
+    sidebarLoading.value = false
+}
+
+function closeCard() {
+    selectedCard.value = null
+}
 </script>
 
 <template>
@@ -43,8 +59,15 @@ function handleColumnChange(event) {
                 <Column
                     :column="element"
                     @card-moved="moveCard"
+                    @card-selected="openCard"
                 />
             </template>
         </draggable>
+
+        <CardSidebar
+            :card="selectedCard"
+            :loading="sidebarLoading"
+            @close="closeCard"
+        />
     </BoardLayout>
 </template>

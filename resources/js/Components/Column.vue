@@ -11,7 +11,7 @@ const props = defineProps({
     },
 })
 
-const emit = defineEmits(['card-moved'])
+const emit = defineEmits(['card-moved', 'card-selected'])
 
 const localCards = ref([...props.column.cards])
 
@@ -101,7 +101,7 @@ async function submitAddCard() {
             @change="handleChange"
         >
             <template #item="{ element }">
-                <CardItem :card="element" />
+                <CardItem :card="element" @card-selected="emit('card-selected', $event)" />
             </template>
         </draggable>
     </div>
