@@ -12,6 +12,8 @@ class Card extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = ['column_id', 'name', 'text', 'assigned_user_id', 'after_card_id'];
+
     public function column(): BelongsTo
     {
         return $this->belongsTo(Column::class);

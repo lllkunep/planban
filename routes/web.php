@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -24,6 +25,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/boards/{board}', [BoardController::class, 'show'])
         ->name('boards.show');
+
+    Route::patch('/cards/{card}/move', [CardController::class, 'move'])
+        ->name('cards.move');
 });
 
 require __DIR__.'/auth.php';
