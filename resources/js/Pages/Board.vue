@@ -11,8 +11,8 @@ const props = defineProps({
     },
 })
 
-function moveCard({ cardId, toColumnId, afterCardId }) {
-    axios.patch(route('cards.move', cardId), { column_id: toColumnId, after_card_id: afterCardId })
+function moveCard({ cardId, toColumnId, position }) {
+    axios.patch(route('cards.move', cardId), { column_id: toColumnId, position: position })
 }
 </script>
 

@@ -20,10 +20,7 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('users')
                 ->nullOnDelete();
-            $table->foreignId('after_card_id')
-                ->nullable()
-                ->constrained('cards')
-                ->nullOnDelete();
+            $table->integer('position')->default(0);
             $table->string('name');
             $table->text('text')->nullable();
             $table->timestamps();

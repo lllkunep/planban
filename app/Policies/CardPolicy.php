@@ -25,7 +25,7 @@ class CardPolicy
      */
     public function view(User $user, Card $card): bool
     {
-        return $this->isMember($user, $card->board);
+        return $this->isMember($user, $card->column->board);
     }
 
     /**
@@ -41,7 +41,7 @@ class CardPolicy
      */
     public function update(User $user, Card $card): bool
     {
-        return $this->isMember($user, $card->board);
+        return $this->isMember($user, $card->column->board);
     }
 
     /**
@@ -49,7 +49,7 @@ class CardPolicy
      */
     public function delete(User $user, Card $card): bool
     {
-        return $this->isMember($user, $card->board);
+        return $this->isMember($user, $card->column->board);
     }
 
     /**
@@ -57,7 +57,7 @@ class CardPolicy
      */
     public function restore(User $user, Card $card): bool
     {
-        return $this->isMember($user, $card->board);
+        return $this->isMember($user, $card->column->board);
     }
 
     /**
@@ -65,11 +65,11 @@ class CardPolicy
      */
     public function forceDelete(User $user, Card $card): bool
     {
-        return $this->isAdmin($user, $card->board);
+        return $this->isAdmin($user, $card->column->board);
     }
 
     public function move(User $user, Card $card): bool
     {
-        return $this->isMember($user, $card->board);
+        return $this->isMember($user, $card->column->board);
     }
 }

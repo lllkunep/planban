@@ -22,7 +22,7 @@ function handleChange(event) {
     emit('card-moved', {
         cardId: item.element.id,
         toColumnId: props.column.id,
-        afterCardId: newIndex > 0 ? localCards.value[newIndex - 1].id : null,
+        position: newIndex,
     })
 }
 </script>

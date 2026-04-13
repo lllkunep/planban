@@ -20,4 +20,11 @@ class Column extends Model
     {
         return $this->hasMany(Card::class);
     }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('order', function ($query) {
+            $query->orderBy('position', 'asc')->orderBy('id', 'desc');
+        });
+    }
 }

@@ -17,10 +17,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
             $table->string('name');
-            $table->foreignId('after_column_id')
-                ->nullable()
-                ->constrained('columns')
-                ->nullOnDelete();
+            $table->integer('position')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

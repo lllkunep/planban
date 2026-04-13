@@ -11,27 +11,20 @@ class CardController extends Controller
 {
     public function move(Request $request, Card $card): JsonResponse
     {
-        $data = $request->validate([
-            'column_id'     => ['required', 'integer', 'exists:columns,id'],
-            'after_card_id' => ['nullable', 'integer', 'exists:cards,id'],
+        $this->authorize('update', $card);
+
+        $validated = $request->validate([
+            'position' => 'required|integer|min:0',
+            'column_id' => 'required|integer|exists:columns,id',
         ]);
 
-        $newColumnId = $data['column_id'];
-        $afterCardId = $data['after_card_id'] ?? null;
+        DB::transaction(function () use ($card, $validated) {
+            $card->update(['position' => $validated['position'], 'column_id' => $validated['column_id']]);
 
-        DB::transaction(function () use ($card, $newColumnId, $afterCardId) {
-            Card::where('after_card_id', $card->id)
-                ->update(['after_card_id' => $card->after_card_id]);
-
-            Card::where('column_id', $newColumnId)
-                ->where('after_card_id', $afterCardId)
+            Card::where('column_id', $validated['column_id'])
+                ->where('position', '>=', $validated['position'])
                 ->where('id', '!=', $card->id)
-                ->update(['after_card_id' => $card->id]);
-
-            $card->update([
-                'column_id'     => $newColumnId,
-                'after_card_id' => $afterCardId,
-            ]);
+                ->increment('position');
         });
 
         return response()->json(['ok' => true]);
