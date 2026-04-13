@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
+import axios from 'axios'
 import draggable from 'vuedraggable'
 import CardItem from '@/Components/CardItem.vue'
 
@@ -25,6 +26,34 @@ function handleChange(event) {
         position: newIndex,
     })
 }
+
+const addingCard = ref(false)
+const newCardName = ref('')
+const newCardInput = ref(null)
+
+async function openAddCard() {
+    addingCard.value = true
+    await nextTick()
+    newCardInput.value?.focus()
+}
+
+function cancelAddCard() {
+    addingCard.value = false
+    newCardName.value = ''
+}
+
+async function submitAddCard() {
+    const name = newCardName.value.trim()
+    if (!name) return
+
+    const { data } = await axios.post(route('cards.store'), {
+        column_id: props.column.id,
+        name,
+    })
+
+    localCards.value.push(data)
+    cancelAddCard()
+}
 </script>
 
 <template>
@@ -42,6 +71,25 @@ function handleChange(event) {
             <button class="btn btn-sm btn-link text-muted" @mousedown.stop>✕</button>
         </div>
 
+        <div v-if="addingCard" class="mt-1 p-1">
+            <textarea
+                ref="newCardInput"
+                v-model="newCardName"
+                class="form-control form-control-sm mb-1"
+                rows="2"
+                placeholder="Card name..."
+                @keydown.enter.prevent="submitAddCard"
+                @keydown.esc="cancelAddCard"
+            />
+            <div class="d-flex gap-1">
+                <button class="btn btn-sm btn-primary" @click="submitAddCard">Add</button>
+                <button class="btn btn-sm btn-light" @click="cancelAddCard">✕</button>
+            </div>
+        </div>
+        <button v-else class="btn btn-sm btn-light w-100 mt-1 text-muted" @click="openAddCard">
+            + Add card
+        </button>
+
         <draggable
             v-model="localCards"
             group="cards"
@@ -56,10 +104,6 @@ function handleChange(event) {
                 <CardItem :card="element" />
             </template>
         </draggable>
-
-        <button class="btn btn-sm btn-light w-100 mt-1 text-muted">
-            + Add card
-        </button>
     </div>
 </template>
 

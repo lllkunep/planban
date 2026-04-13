@@ -27,6 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/boards/{board}', [BoardController::class, 'show'])
         ->name('boards.show');
 
+    Route::post('/cards', [CardController::class, 'store'])
+        ->name('cards.store');
+
     Route::patch('/cards/{card}/move', [CardController::class, 'move'])
         ->name('cards.move');
 
