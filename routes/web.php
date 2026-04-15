@@ -39,8 +39,20 @@ Route::middleware('auth')->group(function () {
     Route::patch('/cards/{card}/move', [CardController::class, 'move'])
         ->name('cards.move');
 
+});
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::put('/columns', [ColumnController::class, 'store'])
+        ->name('columns.store');
+
     Route::patch('/columns/{column}/move', [ColumnController::class, 'move'])
         ->name('columns.move');
+
+    Route::patch('/columns/{column}/update', [ColumnController::class, 'update'])
+        ->name('columns.update');
+
+    Route::delete('/columns/{column}', [ColumnController::class, 'destroy'])
+        ->name('columns.destroy');
 });
 
 require __DIR__.'/auth.php';
