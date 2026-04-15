@@ -1,5 +1,5 @@
 <script setup>
-defineProps({
+const props = defineProps({
     card: {
         type: Object,
         required: true,
