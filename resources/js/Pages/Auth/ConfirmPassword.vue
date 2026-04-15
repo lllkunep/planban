@@ -1,8 +1,8 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import BButton from "@/Components/Bootstrap/BButton.vue";
-import BFormField from "@/Components/Bootstrap/BFormField.vue";
+import Button from "@/Components/Common/Button.vue";
+import FormField from "@/Components/Form/FormField.vue";
 
 const form = useForm({
     password: '',
@@ -27,7 +27,7 @@ const submit = () => {
                         password before continuing.
                     </p>
                     <form @submit.prevent="submit">
-                        <BFormField
+                        <FormField
                             id="password"
                             type="password"
                             v-model="form.password"
@@ -37,7 +37,7 @@ const submit = () => {
                             label="Password"
                             :message="form.errors.password"
                         />
-                        <BButton
+                        <Button
                             variant="primary"
                             text="Confirm"
                             :disabled="form.processing"

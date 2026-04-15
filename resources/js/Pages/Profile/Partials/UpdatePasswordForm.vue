@@ -1,6 +1,6 @@
 <script setup>
-import BFormField from '@/Components/Bootstrap/BFormField.vue';
-import BButton from '@/Components/Bootstrap/BButton.vue';
+import FormField from '@/Components/Form/FormField.vue';
+import Button from '@/Components/Common/Button.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -45,7 +45,7 @@ const updatePassword = () => {
         </header>
 
         <form @submit.prevent="updatePassword">
-            <BFormField
+            <FormField
                 id="current_password"
                 ref="currentPasswordInput"
                 v-model="form.current_password"
@@ -54,7 +54,7 @@ const updatePassword = () => {
                 label="Current Password"
                 :message="form.errors.current_password"
             />
-            <BFormField
+            <FormField
                 id="password"
                 ref="passwordInput"
                 v-model="form.password"
@@ -63,7 +63,7 @@ const updatePassword = () => {
                 label="New Password"
                 :message="form.errors.password"
             />
-            <BFormField
+            <FormField
                 id="password_confirmation"
                 v-model="form.password_confirmation"
                 type="password"
@@ -71,7 +71,7 @@ const updatePassword = () => {
                 label="Confirm Password"
                 :message="form.errors.password_confirmation"
             />
-            <BButton
+            <Button
                 variant="primary"
                 text="Save"
                 :disabled="form.processing"

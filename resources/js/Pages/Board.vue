@@ -4,8 +4,8 @@ import { Head } from '@inertiajs/vue3'
 import axios from 'axios'
 import draggable from 'vuedraggable'
 import BoardLayout from '@/Layouts/BoardLayout.vue'
-import Column from '@/Components/Column.vue'
-import CardSidebar from '@/Components/CardSidebar.vue'
+import Column from '@/Components/Board/Column.vue'
+import CardSidebar from '@/Components/Card/CardSidebar.vue'
 
 const props = defineProps({
     board: {

@@ -4,7 +4,7 @@ import Comment from "./Comment.vue";
 import NewCommentForm from "./NewCommentForm.vue";
 import History from "./History.vue";
 import CardForm from "./CardForm.vue";
-import BButton from "./Bootstrap/BButton.vue";
+import Button from "../Common/Button.vue";
 
 const emit = defineEmits(['close']);
 
@@ -33,13 +33,13 @@ const cardForm = ref(null)
         <div v-if="card" class="sidebar-overlay" @click.self="emit('close')">
             <div class="sidebar-panel">
                 <div class="float-end d-inline">
-                    <BButton
+                    <Button
                         variant="danger"
                         text="Cancel"
                         class="me-2"
                         @click="emit('close')"
                     />
-                    <BButton
+                    <Button
                         variant="success"
                         text="Save"
                         @click="cardForm.save()"

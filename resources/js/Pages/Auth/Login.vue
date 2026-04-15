@@ -1,8 +1,8 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import BFormField from "@/Components/Bootstrap/BFormField.vue";
-import BFormCheckbox from "@/Components/Bootstrap/BFormCheckbox.vue";
-import BButton from "@/Components/Bootstrap/BButton.vue";
+import FormField from "@/Components/Form/FormField.vue";
+import FormCheckbox from "@/Components/Form/FormCheckbox.vue";
+import Button from "@/Components/Common/Button.vue";
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -36,7 +36,7 @@ const submit = () => {
                 <div class="col-12 col-sm-6 py-4 px-4 rounded bg-secondary-subtle">
                     <h2 class="mb-4">Log in</h2>
                     <form @submit.prevent="submit">
-                        <BFormField
+                        <FormField
                             id="email"
                             type="email"
                             v-model="form.email"
@@ -46,7 +46,7 @@ const submit = () => {
                             label="Email"
                             :message="form.errors.email"
                         />
-                        <BFormField
+                        <FormField
                             id="password"
                             type="password"
                             v-model="form.password"
@@ -55,13 +55,13 @@ const submit = () => {
                             label="Password"
                             :message="form.errors.password"
                         />
-                        <BFormCheckbox
+                        <FormCheckbox
                             id="remember"
                             name="remember"
                             label="Remember me"
                             v-model:checked="form.remember"
                         />
-                        <BButton
+                        <Button
                             variant="primary"
                             text="Log in"
                             :disabled="form.processing"

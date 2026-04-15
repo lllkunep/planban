@@ -1,6 +1,6 @@
 <script setup>
 
-import BoardListItem from "@/Components/BoardListItem.vue";
+import BoardListItem from "@/Components/Board/BoardListItem.vue";
 import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 

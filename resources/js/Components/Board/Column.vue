@@ -2,7 +2,7 @@
 import { ref, nextTick } from 'vue'
 import axios from 'axios'
 import draggable from 'vuedraggable'
-import CardItem from '@/Components/CardItem.vue'
+import CardItem from '@/Components/Board/CardItem.vue'
 
 const props = defineProps({
     column: {

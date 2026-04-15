@@ -1,8 +1,8 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import BButton from "@/Components/Bootstrap/BButton.vue";
-import BFormField from "@/Components/Bootstrap/BFormField.vue";
+import Button from "@/Components/Common/Button.vue";
+import FormField from "@/Components/Form/FormField.vue";
 
 const props = defineProps({
     email: {
@@ -38,7 +38,7 @@ const submit = () => {
                 <div class="col-12 col-sm-6 py-4 px-4 rounded bg-secondary-subtle">
                     <h2>Reset Password</h2>
                     <form @submit.prevent="submit">
-                        <BFormField
+                        <FormField
                             id="email"
                             type="email"
                             v-model="form.email"
@@ -48,7 +48,7 @@ const submit = () => {
                             label="Email"
                             :message="form.errors.email"
                         />
-                        <BFormField
+                        <FormField
                             id="password"
                             type="password"
                             v-model="form.password"
@@ -57,7 +57,7 @@ const submit = () => {
                             label="Password"
                             :message="form.errors.password"
                         />
-                        <BFormField
+                        <FormField
                             id="password_confirmation"
                             type="password"
                             v-model="form.password_confirmation"
@@ -66,7 +66,7 @@ const submit = () => {
                             label="Confirm Password"
                             :message="form.errors.password_confirmation"
                         />
-                        <BButton
+                        <Button
                             variant="primary"
                             text="Reset Password"
                             :disabled="form.processing"

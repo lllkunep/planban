@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import BButton from "@/Components/Bootstrap/BButton.vue";
+import Button from "@/Components/Common/Button.vue";
 
 const props = defineProps({
     status: {
@@ -42,7 +42,7 @@ const verificationLinkSent = computed(
                         provided during registration.
                     </p>
                     <form @submit.prevent="submit">
-                        <BButton
+                        <Button
                             variant="primary"
                             text="Resend Verification Email"
                             :disabled="form.processing"

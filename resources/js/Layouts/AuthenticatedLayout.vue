@@ -1,42 +1,42 @@
 <script setup>
-import BNavbar from "@/Components/Bootstrap/BNavbar.vue";
-import BNavLink from "@/Components/Bootstrap/BNavLink.vue";
-import BDropdown from "@/Components/Bootstrap/BDropdown.vue";
-import BDropdownLink from "@/Components/Bootstrap/BDropdownLink.vue";
+import Navbar from "@/Components/Nav/Navbar.vue";
+import NavLink from "@/Components/Nav/NavLink.vue";
+import Dropdown from "@/Components/Nav/Dropdown.vue";
+import DropdownLink from "@/Components/Nav/DropdownLink.vue";
 </script>
 
 <template>
-    <BNavbar>
+    <Navbar>
         <template #sidebar-toggler>
             <slot name="sidebar-toggler" />
         </template>
         <template #nav-items>
-            <BNavLink
+            <NavLink
                 :href="route('dashboard')"
                 :active="route().current('dashboard')"
             >
                 Dashboard
-            </BNavLink>
+            </NavLink>
         </template>
         <template #nav-right>
-            <BDropdown
+            <Dropdown
                 :title="$page.props.auth.user.name"
             >
-                <BDropdownLink
+                <DropdownLink
                     :href="route('profile.edit')"
                 >
                     Profile
-                </BDropdownLink>
-                <BDropdownLink
+                </DropdownLink>
+                <DropdownLink
                     :href="route('logout')"
                     method="post"
                     as="button"
                 >
                     Log Out
-                </BDropdownLink>
-            </BDropdown>
+                </DropdownLink>
+            </Dropdown>
         </template>
-    </BNavbar>
+    </Navbar>
 
     <!-- Page Heading -->
     <header

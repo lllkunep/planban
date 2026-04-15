@@ -1,8 +1,8 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import BFormField from "@/Components/Bootstrap/BFormField.vue";
-import BButton from "@/Components/Bootstrap/BButton.vue";
+import FormField from "@/Components/Form/FormField.vue";
+import Button from "@/Components/Common/Button.vue";
 
 defineProps({
     status: {
@@ -33,7 +33,7 @@ const submit = () => {
                         you to choose a new one.
                     </p>
                     <form @submit.prevent="submit">
-                        <BFormField
+                        <FormField
                             id="email"
                             type="email"
                             v-model="form.email"
@@ -43,7 +43,7 @@ const submit = () => {
                             label="Email"
                             :message="form.errors.email"
                         />
-                        <BButton
+                        <Button
                             variant="primary"
                             text="Email Password Reset Link"
                             :disabled="form.processing"

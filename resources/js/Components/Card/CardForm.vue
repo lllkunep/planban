@@ -1,11 +1,11 @@
 <script setup>
 
-import BTextarea from "@/Components/Bootstrap/BTextarea.vue";
+import Textarea from "@/Components/Form/Textarea.vue";
 import {useForm, usePage} from '@inertiajs/vue3'
 import { computed } from 'vue'
-import BFormField from "@/Components/Bootstrap/BFormField.vue";
-import BFormSelect from "@/Components/Bootstrap/BFormSelect.vue";
-import BMultiselect from "@/Components/Bootstrap/BMultiselect.vue";
+import FormField from "@/Components/Form/FormField.vue";
+import FormSelect from "@/Components/Form/FormSelect.vue";
+import Multiselect from "@/Components/Form/Multiselect.vue";
 
 const page = usePage()
 
@@ -42,7 +42,7 @@ defineExpose({ save })
 <template>
     <form id="card-form">
         <div class="d-flex justify-content-between align-items-start mb-3">
-            <BFormField
+            <FormField
                 class="form-control form-control-lg bg-transparent fw-bold"
                 id="name"
                 v-model="cardForm.name"
@@ -51,7 +51,7 @@ defineExpose({ save })
                 :message="cardForm.errors.name"
             />
         </div>
-        <BFormSelect
+        <FormSelect
             v-model="cardForm.assigned_user_id"
             id="assigned_user_id"
             label="Assigned user"
@@ -63,7 +63,7 @@ defineExpose({ save })
                 <label class="col-form-label" for="tags">Tags</label>
             </div>
             <div class="col-10">
-                <BMultiselect
+                <Multiselect
                     id="tags"
                     :options="currentBoard.boardTags"
                     v-model="cardForm.tags"
@@ -75,7 +75,7 @@ defineExpose({ save })
         </div>
 
         <div class="mb-3">
-            <BTextarea
+            <Textarea
                 id="text"
                 placeholder="Description"
                 v-model="cardForm.text"

@@ -1,7 +1,7 @@
 <script setup>
-import BButton from '@/Components/Bootstrap/BButton.vue';
-import BModal from '@/Components/Bootstrap/BModal.vue';
-import BFormField from '@/Components/Bootstrap/BFormField.vue';
+import Button from '@/Components/Common/Button.vue';
+import Modal from '@/Components/Common/Modal.vue';
+import FormField from '@/Components/Form/FormField.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -37,13 +37,13 @@ const closeModal = () => {
             </p>
         </header>
 
-        <BButton variant="danger" text="Delete Account"
+        <Button variant="danger" text="Delete Account"
                 data-bs-toggle="modal"
                 data-bs-target="#deleteAccountModal"
                 type="button"
         />
 
-        <BModal @close="closeModal" id="deleteAccountModal">
+        <Modal @close="closeModal" id="deleteAccountModal">
             <template #header>
                 <h2>Are you sure you want to delete your account?</h2>
             </template>
@@ -51,7 +51,7 @@ const closeModal = () => {
                 <p>
                     Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.
                 </p>
-                <BFormField
+                <FormField
                     id="password"
                     ref="passwordInput"
                     v-model="form.password"
@@ -62,9 +62,9 @@ const closeModal = () => {
                 />
             </template>
             <template #footer>
-                <BButton variant="secondary" text="Cancel" data-bs-dismiss="modal" />
-                <BButton variant="danger" text="Delete Account" :disabled="form.processing" @click="deleteUser" />
+                <Button variant="secondary" text="Cancel" data-bs-dismiss="modal" />
+                <Button variant="danger" text="Delete Account" :disabled="form.processing" @click="deleteUser" />
             </template>
-        </BModal>
+        </Modal>
     </section>
 </template>

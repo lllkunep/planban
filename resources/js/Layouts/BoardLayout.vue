@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Sidebar from "@/Components/Sidebar.vue";
+import Sidebar from "@/Components/Board/Sidebar.vue";
 </script>
 
 <template>

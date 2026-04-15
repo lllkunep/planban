@@ -1,7 +1,7 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link } from '@inertiajs/vue3';
-import BNavLink from "../Components/Bootstrap/BNavLink.vue";
+import NavLink from "../Components/Nav/NavLink.vue";
 </script>
 
 <template>
@@ -14,18 +14,18 @@ import BNavLink from "../Components/Bootstrap/BNavLink.vue";
             </Link>
             <div class="d-flex">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <BNavLink
+                    <NavLink
                         :href="route('login')"
                         :active="route().current('login')"
                     >
                         Login
-                    </BNavLink>
-                    <BNavLink
+                    </NavLink>
+                    <NavLink
                         :href="route('register')"
                         :active="route().current('register')"
                     >
                         Register
-                    </BNavLink>
+                    </NavLink>
                 </ul>
             </div>
         </div>

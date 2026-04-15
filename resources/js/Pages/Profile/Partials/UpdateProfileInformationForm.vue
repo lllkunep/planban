@@ -1,6 +1,6 @@
 <script setup>
-import FormField from '@/Components/Bootstrap/BFormField.vue';
-import Button from '@/Components/Bootstrap/BButton.vue';
+import FormField from '@/Components/Form/FormField.vue';
+import Button from '@/Components/Common/Button.vue';
 import {useForm, usePage} from "@inertiajs/vue3";
 
 const user = usePage().props.auth.user;
