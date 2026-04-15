@@ -63,6 +63,7 @@ function handleColumnChange(event) {
             style="height: calc(100vh - 60px)"
             ghost-class="drag-ghost"
             @change="handleColumnChange"
+            :move="(event) => Boolean(event.draggedContext.element.id)"
         >
             <template #item="{ element }">
                 <Column
