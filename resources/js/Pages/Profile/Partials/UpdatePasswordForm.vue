@@ -71,11 +71,9 @@ const updatePassword = () => {
                 label="Confirm Password"
                 :message="form.errors.password_confirmation"
             />
-            <Button
-                variant="primary"
-                text="Save"
-                :disabled="form.processing"
-            />
+            <Button variant="primary" :disabled="form.processing">
+                Save
+            </Button>
         </form>
     </section>
 </template>

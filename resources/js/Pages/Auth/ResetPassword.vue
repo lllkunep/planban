@@ -66,11 +66,9 @@ const submit = () => {
                             label="Confirm Password"
                             :message="form.errors.password_confirmation"
                         />
-                        <Button
-                            variant="primary"
-                            text="Reset Password"
-                            :disabled="form.processing"
-                        />
+                        <Button variant="primary" :disabled="form.processing">
+                            Reset Password
+                        </Button>
                     </form>
                 </div>
             </div>

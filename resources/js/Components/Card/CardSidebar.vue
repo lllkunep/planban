@@ -33,17 +33,12 @@ const cardForm = ref(null)
         <div v-if="card" class="sidebar-overlay" @click.self="emit('close')">
             <div class="sidebar-panel">
                 <div class="float-end d-inline">
-                    <Button
-                        variant="danger"
-                        text="Cancel"
-                        class="me-2"
-                        @click="emit('close')"
-                    />
-                    <Button
-                        variant="success"
-                        text="Save"
-                        @click="cardForm.save()"
-                    />
+                    <Button variant="danger" class="me-2" @click="emit('close')">
+                        Cancel
+                    </Button>
+                    <Button variant="success" @click="cardForm.save()">
+                        Save
+                    </Button>
                 </div>
                 <div v-if="loading" class="text-center text-muted py-4">
                     <div class="spinner-border spinner-border-sm" />

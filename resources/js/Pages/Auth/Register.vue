@@ -64,11 +64,9 @@ const submit = () => {
                             label="Confirm Password"
                             :message="form.errors.password_confirmation"
                         />
-                        <Button
-                            variant="primary"
-                            text="Register"
-                            :disabled="form.processing"
-                        />
+                        <Button variant="primary" :disabled="form.processing">
+                            Register
+                        </Button>
                         <Link
                             :href="route('login')"
                             class="float-end link-secondary"

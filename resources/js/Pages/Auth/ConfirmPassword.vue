@@ -37,11 +37,9 @@ const submit = () => {
                             label="Password"
                             :message="form.errors.password"
                         />
-                        <Button
-                            variant="primary"
-                            text="Confirm"
-                            :disabled="form.processing"
-                        />
+                        <Button variant="primary" :disabled="form.processing">
+                            Confirm
+                        </Button>
                     </form>
                 </div>
             </div>

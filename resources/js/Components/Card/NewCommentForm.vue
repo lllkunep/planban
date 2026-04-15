@@ -14,10 +14,9 @@ import Textarea from "@/Components/Form/Textarea.vue";
                 height="150px"
             />
         </div>
-        <Button
-            variant="primary"
-            text="Add comment"
-        />
+        <Button variant="primary">
+            Add comment
+        </Button>
     </form>
 </template>
 

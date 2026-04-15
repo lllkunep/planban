@@ -45,11 +45,9 @@ const form = useForm({
                 label="Email"
                 :message="form.errors.email"
             />
-            <Button
-                variant="primary"
-                text="Save"
-                :disabled="form.processing"
-            />
+            <Button variant="primary" :disabled="form.processing">
+                Save
+            </Button>
         </form>
     </section>
 </template>

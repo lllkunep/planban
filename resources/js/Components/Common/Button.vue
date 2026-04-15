@@ -6,10 +6,6 @@ defineProps({
         type: String,
         default: 'primary',
     },
-    text: {
-        type: String,
-        default: '',
-    },
     href: {
         type: String,
         default: '',
@@ -27,7 +23,9 @@ defineProps({
         :href="href"
         :class="'btn btn-' + variant"
     >
-        {{ text }}
+        <slot />
     </Link>
-    <button v-else :type="type" :class="'btn btn-' + variant">{{ text }}</button>
+    <button v-else :type="type" :class="'btn btn-' + variant">
+        <slot />
+    </button>
 </template>

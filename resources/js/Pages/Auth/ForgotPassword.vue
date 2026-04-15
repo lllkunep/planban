@@ -43,11 +43,9 @@ const submit = () => {
                             label="Email"
                             :message="form.errors.email"
                         />
-                        <Button
-                            variant="primary"
-                            text="Email Password Reset Link"
-                            :disabled="form.processing"
-                        />
+                        <Button variant="primary" :disabled="form.processing">
+                            Email Password Reset Link
+                        </Button>
                     </form>
                 </div>
             </div>

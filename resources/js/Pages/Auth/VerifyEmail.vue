@@ -42,11 +42,9 @@ const verificationLinkSent = computed(
                         provided during registration.
                     </p>
                     <form @submit.prevent="submit">
-                        <Button
-                            variant="primary"
-                            text="Resend Verification Email"
-                            :disabled="form.processing"
-                        />
+                        <Button variant="primary" :disabled="form.processing">
+                            Resend Verification Email
+                        </Button>
                         <Link
                             :href="route('logout')"
                             method="post"

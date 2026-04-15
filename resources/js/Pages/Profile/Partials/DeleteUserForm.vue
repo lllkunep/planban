@@ -37,11 +37,9 @@ const closeModal = () => {
             </p>
         </header>
 
-        <Button variant="danger" text="Delete Account"
-                data-bs-toggle="modal"
-                data-bs-target="#deleteAccountModal"
-                type="button"
-        />
+        <Button variant="danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal" type="button">
+            Delete Account
+        </Button>
 
         <Modal @close="closeModal" id="deleteAccountModal">
             <template #header>
@@ -62,8 +60,12 @@ const closeModal = () => {
                 />
             </template>
             <template #footer>
-                <Button variant="secondary" text="Cancel" data-bs-dismiss="modal" />
-                <Button variant="danger" text="Delete Account" :disabled="form.processing" @click="deleteUser" />
+                <Button variant="secondary" data-bs-dismiss="modal">
+                    Cancel
+                </Button>
+                <Button variant="danger" :disabled="form.processing" @click="deleteUser">
+                    Delete Account
+                </Button>
             </template>
         </Modal>
     </section>

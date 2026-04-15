@@ -61,11 +61,7 @@ const submit = () => {
                             label="Remember me"
                             v-model:checked="form.remember"
                         />
-                        <Button
-                            variant="primary"
-                            text="Log in"
-                            :disabled="form.processing"
-                        />
+                        <Button variant="primary" :disabled="form.processing">Log in</Button>
                         <Link
                             v-if="canResetPassword"
                             :href="route('password.request')"
