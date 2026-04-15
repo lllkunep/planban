@@ -1,8 +1,11 @@
 <script setup>
 import { ref, nextTick } from 'vue'
-import axios from 'axios'
 import draggable from 'vuedraggable'
+import axios from 'axios'
 import CardItem from '@/Components/Board/CardItem.vue'
+import UnborderedInput from "@/Components/Form/UnborderedInput.vue";
+import IconButton from "@/Components/Common/IconButton.vue";
+import AddCardForm from "@/Components/Card/AddCardForm.vue";
 
 const props = defineProps({
     column: {
@@ -27,23 +30,8 @@ function handleChange(event) {
     })
 }
 
-const addingCard = ref(false)
-const newCardName = ref('')
-const newCardInput = ref(null)
-
-async function openAddCard() {
-    addingCard.value = true
-    await nextTick()
-    newCardInput.value?.focus()
-}
-
-function cancelAddCard() {
-    addingCard.value = false
-    newCardName.value = ''
-}
-
-async function submitAddCard() {
-    const name = newCardName.value.trim()
+async function submitAddCard(newCardName) {
+    const name = newCardName
     if (!name) return
 
     const { data } = await axios.post(route('cards.store'), {
@@ -52,43 +40,25 @@ async function submitAddCard() {
     })
 
     localCards.value.push(data)
-    cancelAddCard()
 }
 </script>
 
 <template>
     <div class="flex-shrink-0" style="width: 280px">
-
         <div class="d-flex justify-content-between align-items-center
                     bg-light rounded-top p-2 column-handle"
              style="cursor: grab">
-            <input
-                class="form-control form-control-sm border-0 bg-transparent fw-bold"
+            <UnborderedInput
                 :value="column.name"
-                style="cursor: text"
                 @mousedown.stop
             />
-            <button class="btn btn-sm btn-link text-muted" @mousedown.stop>✕</button>
+            <IconButton
+                icon="trash"
+                @mousedown.stop
+            />
         </div>
 
-        <div v-if="addingCard" class="mt-1 p-1">
-            <textarea
-                ref="newCardInput"
-                v-model="newCardName"
-                class="form-control form-control-sm mb-1"
-                rows="2"
-                placeholder="Card name..."
-                @keydown.enter.prevent="submitAddCard"
-                @keydown.esc="cancelAddCard"
-            />
-            <div class="d-flex gap-1">
-                <button class="btn btn-sm btn-primary" @click="submitAddCard">Add</button>
-                <button class="btn btn-sm btn-light" @click="cancelAddCard">✕</button>
-            </div>
-        </div>
-        <button v-else class="btn btn-sm btn-light w-100 mt-1 text-muted" @click="openAddCard">
-            + Add card
-        </button>
+        <AddCardForm :on-submit="submitAddCard"/>
 
         <draggable
             v-model="localCards"

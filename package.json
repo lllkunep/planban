@@ -19,6 +19,7 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
+        "bootstrap-icons": "^1.13.1",
         "vue-multiselect": "^3.5.0",
         "vuedraggable": "^4.1.0"
     }
