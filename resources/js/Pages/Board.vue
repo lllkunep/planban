@@ -14,17 +14,8 @@ const props = defineProps({
     },
 })
 
-const localColumns = ref([...props.board.columns])
-
 function moveCard({ cardId, toColumnId, position }) {
     axios.patch(route('cards.move', cardId), { column_id: toColumnId, position })
-}
-
-function handleColumnChange(event) {
-    const item = event.moved
-    if (!item) return
-
-    axios.patch(route('columns.move', item.element.id), { position: item.newIndex })
 }
 
 const selectedCard = ref(null)
@@ -40,6 +31,24 @@ async function openCard(card) {
 
 function closeCard() {
     selectedCard.value = null
+}
+
+const localColumns = ref([...props.board.columns])
+localColumns.value.push({id: null, name: '', cards: [], board_id: props.board.id, position: localColumns.value.length})
+
+function columnAdded(){
+    localColumns.value.push({id: null, name: '', cards: [], board_id: props.board.id, position: localColumns.value.length})
+}
+
+async function columnDeleted(columnId) {
+    localColumns.value = localColumns.value.filter(column => column.id !== columnId)
+}
+
+function handleColumnChange(event) {
+    const item = event.moved
+    if (!item) return
+
+    axios.patch(route('columns.move', item.element.id), { position: item.newIndex })
 }
 </script>
 
@@ -60,10 +69,11 @@ function closeCard() {
                     :column="element"
                     @card-moved="moveCard"
                     @card-selected="openCard"
+                    @column-deleted="columnDeleted"
+                    @column-added="columnAdded"
                 />
             </template>
         </draggable>
-
         <CardSidebar
             :card="selectedCard"
             :loading="sidebarLoading"

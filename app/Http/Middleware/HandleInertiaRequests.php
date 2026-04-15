@@ -57,6 +57,7 @@ class HandleInertiaRequests extends Middleware
                 ]);
 
                 return [
+                    'boardId'      => $board->id,
                     'boardMembers' => $board->members,
                     'boardTags'    => $board->tags,
                 ];

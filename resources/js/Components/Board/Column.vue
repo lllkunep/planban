@@ -1,5 +1,5 @@
 <script setup>
-import { ref, nextTick } from 'vue'
+import {ref} from 'vue'
 import draggable from 'vuedraggable'
 import axios from 'axios'
 import CardItem from '@/Components/Board/CardItem.vue'
@@ -14,7 +14,7 @@ const props = defineProps({
     },
 })
 
-const emit = defineEmits(['card-moved', 'card-selected'])
+const emit = defineEmits(['card-selected', 'card-moved', 'column-added', 'column-deleted' ])
 
 const localCards = ref([...props.column.cards])
 
@@ -41,6 +41,28 @@ async function submitAddCard(newCardName) {
 
     localCards.value.push(data)
 }
+
+async function changeColumnName(event) {
+    const newName = event.target.value
+    if (!newName) return
+
+    if (!props.column.id) {
+        props.column.name = newName
+        const { data } = await axios.put(route('columns.store'), props.column)
+        props.column.id = data.id
+        emit('column-added')
+    } else {
+        await axios.patch(route('columns.update', props.column.id), {
+            name: newName,
+        })
+    }
+}
+
+async function deleteColumn(columnId) {
+    await axios.delete(route('columns.destroy', columnId))
+    emit('column-deleted', columnId)
+}
+
 </script>
 
 <template>
@@ -50,15 +72,23 @@ async function submitAddCard(newCardName) {
              style="cursor: grab">
             <UnborderedInput
                 :value="column.name"
+                @change="changeColumnName"
                 @mousedown.stop
+                :placeholder="column.id ? 'Column Name...' : '+ New Column'"
+                required
             />
             <IconButton
                 icon="trash"
                 @mousedown.stop
+                :class="{'disabled': localCards.length > 0}"
+                :title="localCards.length > 0 ? 'Cannot delete non-empty column' : ''"
+                v-if="column.id"
+                @click="localCards.length === 0 && deleteColumn(column.id)"
+                style="pointer-events: auto;cursor: not-allowed;"
             />
         </div>
 
-        <AddCardForm :on-submit="submitAddCard"/>
+        <AddCardForm v-if="column.id" :on-submit="submitAddCard"/>
 
         <draggable
             v-model="localCards"
