@@ -24,9 +24,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/boards/{board}', [BoardController::class, 'show'])
-        ->name('boards.show');
-
     Route::get('/cards/{card}', [CardController::class, 'show'])
         ->name('cards.show');
 
@@ -42,13 +39,30 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::put('/columns', [ColumnController::class, 'store'])
+    Route::get('/boards/{board}', [BoardController::class, 'show'])
+        ->name('boards.show');
+
+    Route::post('/boards', [BoardController::class, 'store'])
+        ->name('boards.store');
+
+    Route::get('/boards/{board}/edit', [BoardController::class, 'edit'])
+        ->name('boards.edit');
+
+    Route::patch('/boards/{board}', [BoardController::class, 'update'])
+        ->name('boards.update');
+
+    Route::delete('/boards/{board}', [BoardController::class, 'destroy'])
+        ->name('boards.destroy');
+});
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::post('/columns', [ColumnController::class, 'store'])
         ->name('columns.store');
 
     Route::patch('/columns/{column}/move', [ColumnController::class, 'move'])
         ->name('columns.move');
 
-    Route::patch('/columns/{column}/update', [ColumnController::class, 'update'])
+    Route::patch('/columns/{column}', [ColumnController::class, 'update'])
         ->name('columns.update');
 
     Route::delete('/columns/{column}', [ColumnController::class, 'destroy'])

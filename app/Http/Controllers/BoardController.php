@@ -26,7 +26,16 @@ class BoardController extends Controller
 
         $board->load('columns.cards');
 
-        return Inertia::render('Board', [
+        return Inertia::render('Board/Show', [
+            'board' => $board,
+        ]);
+    }
+
+    public function edit(Board $board): Response
+    {
+        $this->authorize('update', $board);
+
+        return Inertia::render('Board/Edit', [
             'board' => $board,
         ]);
     }
