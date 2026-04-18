@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tags', function (Blueprint $table) {
+        Schema::create('invitations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('board_id')
-                ->constrained()
-                ->cascadeOnDelete();
-            $table->string('name', 20);
-            $table->string('color', 7);
+            $table->string('email')->unique();
+            $table->foreignId('board_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tags');
+        Schema::dropIfExists('invitations');
     }
 };
