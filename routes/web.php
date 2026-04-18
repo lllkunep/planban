@@ -5,6 +5,7 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TagController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -45,6 +46,21 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/boards', [BoardController::class, 'store'])
         ->name('boards.store');
 
+    Route::post('/boards/{board}/add-member', [BoardController::class, 'addMember'])
+        ->name('boards.addMember');
+
+    Route::delete('/boards/{board}/remove-member', [BoardController::class, 'removeMember'])
+        ->name('boards.removeMember');
+
+    Route::delete('/boards/{board}/remove-invitation', [BoardController::class, 'removeInvitation'])
+        ->name('boards.removeInvitation');
+
+    Route::patch('/boards/{board}/change-role', [BoardController::class, 'changeRole'])
+        ->name('boards.changeRole');
+
+    Route::patch('/boards/{board}/set-new-owner', [BoardController::class, 'setNewOwner'])
+        ->name('boards.setNewOwner');
+
     Route::get('/boards/{board}/edit', [BoardController::class, 'edit'])
         ->name('boards.edit');
 
@@ -53,6 +69,15 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::delete('/boards/{board}', [BoardController::class, 'destroy'])
         ->name('boards.destroy');
+
+    Route::post('/tags', [TagController::class, 'store'])
+        ->name('tags.store');
+
+    Route::patch('/tags/{tag}/edit', [TagController::class, 'update'])
+        ->name('tags.update');
+
+    Route::delete('/tags/{tag}', [TagController::class, 'destroy'])
+        ->name('tags.destroy');
 });
 
 Route::group(['middleware' => 'auth'], function () {

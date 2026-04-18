@@ -59,4 +59,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class);
     }
+
+    public static function getByEmail(string $email): ?User
+    {
+        return self::where('email', $email)->first();
+    }
 }

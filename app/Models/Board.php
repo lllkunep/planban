@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Board extends Model
 {
+    protected $fillable = ['name'];
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class)
@@ -23,5 +24,10 @@ class Board extends Model
     public function tags(): HasMany
     {
         return $this->hasMany(Tag::class);
+    }
+
+    public function invitations(): HasMany
+    {
+        return $this->hasMany(Invitation::class);
     }
 }
