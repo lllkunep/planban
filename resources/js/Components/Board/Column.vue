@@ -48,7 +48,7 @@ async function changeColumnName(event) {
 
     if (!props.column.id) {
         props.column.name = newName
-        const { data } = await axios.put(route('columns.store'), props.column)
+        const { data } = await axios.post(route('columns.store'), props.column)
         props.column.id = data.id
         emit('column-added')
     } else {
