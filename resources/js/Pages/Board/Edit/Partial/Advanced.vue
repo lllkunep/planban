@@ -27,7 +27,7 @@ async function setNewOwner() {
 function deleteBoard(){
     if(!confirm('Are you sure you want to delete this board?')) return;
 
-    router.delete(route('boards.destroy', board.id))
+    router.delete(route('boards.destroy', board.value.id))
 }
 </script>
 
