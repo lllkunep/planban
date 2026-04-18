@@ -62,6 +62,11 @@ class HandleInertiaRequests extends Middleware
                     'boardTags'    => $board->tags,
                 ];
             },
+
+            'flash' => [
+                'success' => session('success'),
+                'error'   => session('error'),
+            ],
         ];
     }
 }
