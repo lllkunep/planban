@@ -1,11 +1,7 @@
 <?php
 
-use App\Http\Controllers\BoardController;
-use App\Http\Controllers\CardController;
-use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TagController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,81 +13,17 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->middleware('guest')->name('welcome');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/cards/{card}', [CardController::class, 'show'])
-        ->name('cards.show');
-
-    Route::post('/cards', [CardController::class, 'store'])
-        ->name('cards.store');
-
-    Route::patch('/cards/{card}/edit', [CardController::class, 'update'])
-        ->name('cards.update');
-
-    Route::patch('/cards/{card}/move', [CardController::class, 'move'])
-        ->name('cards.move');
-
-});
-
-Route::group(['middleware' => 'auth'], function () {
-    Route::get('/boards/{board}', [BoardController::class, 'show'])
-        ->name('boards.show');
-
-    Route::post('/boards', [BoardController::class, 'store'])
-        ->name('boards.store');
-
-    Route::post('/boards/{board}/add-member', [BoardController::class, 'addMember'])
-        ->name('boards.addMember');
-
-    Route::delete('/boards/{board}/remove-member', [BoardController::class, 'removeMember'])
-        ->name('boards.removeMember');
-
-    Route::delete('/boards/{board}/remove-invitation', [BoardController::class, 'removeInvitation'])
-        ->name('boards.removeInvitation');
-
-    Route::patch('/boards/{board}/change-role', [BoardController::class, 'changeRole'])
-        ->name('boards.changeRole');
-
-    Route::patch('/boards/{board}/set-new-owner', [BoardController::class, 'setNewOwner'])
-        ->name('boards.setNewOwner');
-
-    Route::get('/boards/{board}/edit', [BoardController::class, 'edit'])
-        ->name('boards.edit');
-
-    Route::patch('/boards/{board}', [BoardController::class, 'update'])
-        ->name('boards.update');
-
-    Route::delete('/boards/{board}', [BoardController::class, 'destroy'])
-        ->name('boards.destroy');
-
-    Route::post('/tags', [TagController::class, 'store'])
-        ->name('tags.store');
-
-    Route::patch('/tags/{tag}/edit', [TagController::class, 'update'])
-        ->name('tags.update');
-
-    Route::delete('/tags/{tag}', [TagController::class, 'destroy'])
-        ->name('tags.destroy');
-});
-
-Route::group(['middleware' => 'auth'], function () {
-    Route::post('/columns', [ColumnController::class, 'store'])
-        ->name('columns.store');
-
-    Route::patch('/columns/{column}/move', [ColumnController::class, 'move'])
-        ->name('columns.move');
-
-    Route::patch('/columns/{column}', [ColumnController::class, 'update'])
-        ->name('columns.update');
-
-    Route::delete('/columns/{column}', [ColumnController::class, 'destroy'])
-        ->name('columns.destroy');
+    Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->group(function () {
+        Route::get('/', 'edit')->name('edit');
+        Route::patch('/', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('destroy');
+    });
 });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/board.php';
