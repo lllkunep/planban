@@ -50,4 +50,13 @@ class Board extends Model
             ]);
         });
     }
+
+    public function addTag($name, $color)
+    {
+        return Tag::create([
+            'name' => $name,
+            'color' => $color,
+            'board_id' => $this->id,
+        ]);
+    }
 }

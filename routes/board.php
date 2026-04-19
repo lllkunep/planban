@@ -1,13 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Async\BoardUserController;
+use App\Http\Controllers\Async\TagController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ColumnController;
-use App\Http\Controllers\TagController;
 use App\Http\Middleware\EnsureUserIsBoardMember;
 use App\Http\Middleware\HasAccessToBoard;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::prefix('boards')->name('boards.')->group(function () {
