@@ -33,14 +33,14 @@ class TagController extends AsyncController
      */
     public function update(Request $request, Board $board, Tag $tag)
     {
+        if (!$tag->belongsToBoard($board)) {
+            throw new ModelNotFoundException();
+        }
+
         $request->validate([
             'name' => 'sometimes|string|max:20',
             'color' => 'sometimes|string|max:7',
         ]);
-
-        if ($tag->board_id !== $board->id) {
-            throw new ModelNotFoundException();
-        }
 
         $tag->update($request->only([
             'name',
@@ -59,7 +59,7 @@ class TagController extends AsyncController
      */
     public function destroy(Board $board, Tag $tag)
     {
-        if ($tag->board_id !== $board->id) {
+        if (!$tag->belongsToBoard($board)) {
             throw new ModelNotFoundException();
         }
 

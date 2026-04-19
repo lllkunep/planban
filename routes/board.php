@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
         Route::prefix('{board}/columns')->controller(ColumnController::class)->group(function () {
             Route::post('/', 'store')->name('columns.store');
             Route::patch('/{column}', 'update')->name('columns.update');
+            Route::patch('/{column}/move', 'move')->name('columns.move');
             Route::delete('/{column}', 'destroy')->name('columns.destroy');
         });
 

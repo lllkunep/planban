@@ -20,6 +20,11 @@ class Tag extends Model
             ->withTimestamps();
     }
 
+    public function belongsToBoard(Board $board): bool
+    {
+        return $this->board_id === $board->id;
+    }
+
     protected static function booted(): void
     {
         static::addGlobalScope('order', function ($query) {

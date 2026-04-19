@@ -17,7 +17,7 @@ class CardController extends AsyncController
             throw new ModelNotFoundException();
         }
 
-        $card->load(['assignedUser', 'tags', 'comments.user', 'histories.user']);
+        $card->load(['assignedUsers', 'tags', 'comments.user', 'histories.user']);
 
         return response()->json([
             'success' => true,
@@ -90,6 +90,20 @@ class CardController extends AsyncController
             'success' => true,
             'message' => 'Card moved successfully',
             'data' => $card,
+        ]);
+    }
+
+    public function destroy(Board $board, Card $card): JsonResponse
+    {
+        if (!$card->belongsToBoard($board)){
+            throw new ModelNotFoundException();
+        }
+
+        $card->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Card deleted successfully',
         ]);
     }
 }

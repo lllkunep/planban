@@ -36,7 +36,7 @@ class Card extends Model
             ->withTimestamps();
     }
 
-    public function assignedUser(): BelongsTo
+    public function assignedUsers(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_user_id');
     }
