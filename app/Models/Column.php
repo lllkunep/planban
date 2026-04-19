@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Column extends Model
 {
@@ -26,6 +27,27 @@ class Column extends Model
     public function belongsToBoard(Board $board): bool
     {
         return $this->board_id === $board->id;
+    }
+
+    public function move($position): void
+    {
+        DB::transaction(function () use ($position) {
+            $this->update(['position' => $position]);
+
+            $boardColumns = Column::where('board_id', $this->board_id)
+                ->where('id', '!=', $this->id)
+                ->orderBy('position')
+                ->get();
+
+            $j = 0;
+            for ($i = 0; $i < $boardColumns->count(); $i++) {
+                if ($i == $position){
+                    $j = 1;
+                }
+                $boardColumns[$i]->position = $i + $j;
+                $boardColumns[$i]->save();
+            }
+        });
     }
 
 
