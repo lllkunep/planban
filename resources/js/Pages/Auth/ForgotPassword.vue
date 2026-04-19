@@ -3,6 +3,9 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import FormField from "@/Components/Form/FormField.vue";
 import Button from "@/Components/Common/Button.vue";
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes();
 
 defineProps({
     status: {
@@ -15,7 +18,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('password.email'));
+    form.post(routes.password.email());
 };
 </script>
 

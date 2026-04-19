@@ -12,4 +12,9 @@ class Invitation extends Model
     {
         return $this->belongsTo(Board::class);
     }
+
+    public function belongsToBoard(Board $board): bool
+    {
+        return $this->board_id === $board->id;
+    }
 }

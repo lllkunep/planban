@@ -3,6 +3,9 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import Button from "@/Components/Common/Button.vue";
 import FormField from "@/Components/Form/FormField.vue";
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes();
 
 const props = defineProps({
     email: {
@@ -23,7 +26,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('password.store'), {
+    form.post(routes.password.store(), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };

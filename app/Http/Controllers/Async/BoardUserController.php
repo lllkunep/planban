@@ -7,6 +7,7 @@ use App\Models\Board;
 use App\Models\Invitation;
 use App\Models\User;
 use App\Traits\ChecksBoardMembership;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
@@ -93,5 +94,14 @@ class BoardUserController extends AsyncController
             'message' => 'Owner role set successfully',
             'data' => $board->members()->wherePivot('user_id', $user->id)->first(),
         ]);
+    }
+
+    public function removeInvitation(Board $board, Invitation $invitation){
+        if (!$invitation->belongsToBoard($board)) {
+            throw new ModelNotFoundException();
+        }
+
+        $invitation->delete();
+        return response()->json(['ok' => true]);
     }
 }

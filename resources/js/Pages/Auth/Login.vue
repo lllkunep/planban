@@ -4,6 +4,9 @@ import FormField from "@/Components/Form/FormField.vue";
 import FormCheckbox from "@/Components/Form/FormCheckbox.vue";
 import Button from "@/Components/Common/Button.vue";
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes();
 
 defineProps({
     canResetPassword: {
@@ -21,7 +24,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('login'), {
+    form.post(routes.login(), {
         onFinish: () => form.reset('password'),
     });
 };
@@ -64,7 +67,7 @@ const submit = () => {
                         <Button variant="primary" :disabled="form.processing">Log in</Button>
                         <Link
                             v-if="canResetPassword"
-                            :href="route('password.request')"
+                            :href="routes.password.request()"
                             class="float-end link-secondary"
                         >
                             Forgot your password?

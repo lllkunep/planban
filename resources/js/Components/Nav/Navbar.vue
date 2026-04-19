@@ -2,13 +2,17 @@
 
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import {Link} from "@inertiajs/vue3";
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes();
+
 </script>
 
 <template>
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
         <slot name="sidebar-toggler" />
         <div class="container-sm">
-            <Link :href="route('dashboard')">
+            <Link :href="routes.dashboard()">
                 <ApplicationLogo
                     width="30" height="24"
                 />

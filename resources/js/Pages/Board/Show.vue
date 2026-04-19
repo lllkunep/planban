@@ -6,6 +6,9 @@ import draggable from 'vuedraggable'
 import BoardLayout from '@/Layouts/BoardLayout.vue'
 import Column from '@/Components/Board/Column.vue'
 import CardSidebar from '@/Components/Card/CardSidebar.vue'
+import {useRoutes} from "@/composables/useRoutes.js";
+
+const routes = useRoutes()
 
 const props = defineProps({
     board: {
@@ -14,8 +17,8 @@ const props = defineProps({
     },
 })
 
-function moveCard({ cardId, toColumnId, position }) {
-    axios.patch(route('cards.move', cardId), { column_id: toColumnId, position })
+function moveCard(column, card, position) {
+    axios.patch(routes.boards.cards.move(column, card), { position: position })
 }
 
 const selectedCard = ref(null)
@@ -24,8 +27,8 @@ const sidebarLoading = ref(false)
 async function openCard(card) {
     selectedCard.value = card
     sidebarLoading.value = true
-    const { data } = await axios.get(route('cards.show', card.id))
-    selectedCard.value = data
+    const { response } = await axios.get(routes.boards.cards.show(card))
+    selectedCard.value = response.data
     sidebarLoading.value = false
 }
 
@@ -48,7 +51,7 @@ function handleColumnChange(event) {
     const item = event.moved
     if (!item) return
 
-    axios.patch(route('columns.move', item.element.id), { position: item.newIndex })
+    axios.patch(routes.boards.columns.move(item.element), { position: item.newIndex })
 }
 </script>
 

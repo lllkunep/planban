@@ -3,6 +3,9 @@ import FormField from '@/Components/Form/FormField.vue';
 import Button from '@/Components/Common/Button.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes();
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -14,7 +17,7 @@ const form = useForm({
 });
 
 const updatePassword = () => {
-    form.put(route('password.update'), {
+    form.put(routes.password.update(), {
         preserveScroll: true,
         onSuccess: () => form.reset(),
         onError: () => {

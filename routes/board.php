@@ -19,18 +19,20 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{board}', 'destroy')->name('destroy');
         });
 
-        Route::prefix('{board}/users')->controller(BoardUserController::class)->group(function () {
-            Route::post('/', 'attach')->name('attach');
-            Route::delete('/{user}', 'detach')->name('detach');
-            Route::patch('/{user}/change-role', 'changeRole')->name('changeRole');
-            Route::patch('/{user}/set-new-owner', 'setNewOwner')->name('setNewOwner');
-        })->middleware(EnsureUserIsBoardMember::class);
-
         Route::prefix('{board}/tags')->controller(TagController::class)->group(function () {
             Route::post('/', 'store')->name('tags.store');
             Route::patch('/{tag}/edit', 'update')->name('tags.update');
             Route::delete('/{tag}', 'destroy')->name('tags.destroy');
         });
+
+        Route::prefix('{board}/users')->controller(BoardUserController::class)->group(function () {
+            Route::post('/', 'attach')->name('attach');
+            Route::delete('/{user}', 'detach')->name('detach');
+            Route::delete('/{user}', 'detach')->name('detach');
+            Route::patch('/{user}/change-role', 'changeRole')->name('changeRole');
+            Route::patch('/{user}/set-new-owner', 'setNewOwner')->name('setNewOwner');
+            Route::delete('/{board}/invitations/{invitation}', 'removeInvitation')->name('removeInvitation');
+        })->middleware(EnsureUserIsBoardMember::class);
 
         Route::prefix('{board}/columns')->controller(ColumnController::class)->group(function () {
             Route::post('/', 'store')->name('columns.store');

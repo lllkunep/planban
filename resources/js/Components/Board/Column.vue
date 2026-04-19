@@ -6,6 +6,9 @@ import CardItem from '@/Components/Board/CardItem.vue'
 import UnborderedInput from "@/Components/Form/UnborderedInput.vue";
 import IconButton from "@/Components/Common/IconButton.vue";
 import AddCardForm from "@/Components/Card/AddCardForm.vue";
+import {useRoutes} from "@/composables/useRoutes.js";
+// TODO: make validations
+const routes = useRoutes()
 
 const props = defineProps({
     column: {
@@ -23,23 +26,18 @@ function handleChange(event) {
     if (!item) return
 
     const newIndex = item.newIndex
-    emit('card-moved', {
-        cardId: item.element.id,
-        toColumnId: props.column.id,
-        position: newIndex,
-    })
+    emit('card-moved', props.column, item.element, newIndex);
 }
 
 async function submitAddCard(newCardName) {
     const name = newCardName
     if (!name) return
 
-    const { data } = await axios.post(route('cards.store'), {
-        column_id: props.column.id,
-        name,
+    const { response } = await axios.post(routes.boards.cards.store(props.column), {
+        name: name,
     })
 
-    localCards.value.push(data)
+    localCards.value.push(response.data)
 }
 
 async function changeColumnName(event) {
@@ -47,19 +45,18 @@ async function changeColumnName(event) {
     if (!newName) return
 
     if (!props.column.id) {
-        props.column.name = newName
-        const { data } = await axios.post(route('columns.store'), props.column)
-        props.column.id = data.id
+        const { response } = await axios.post(routes.boards.columns.store(), props.column)
+        props.column.id = response.data.id
         emit('column-added')
     } else {
-        await axios.patch(route('columns.update', props.column.id), {
+        await axios.patch(routes.boards.columns.update(props.column), {
             name: newName,
         })
     }
 }
 
 async function deleteColumn(columnId) {
-    await axios.delete(route('columns.destroy', columnId))
+    await axios.delete(routes.boards.columns.destroy(props.column))
     emit('column-deleted', columnId)
 }
 

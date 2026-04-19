@@ -56,7 +56,7 @@ class CardController extends AsyncController
             'text'             => 'sometimes|string|nullable',
             'assigned_user_id' => 'sometimes|nullable|exists:users,id',
             'tags'             => 'sometimes|array',
-            'tags.*'           => 'exists:tags,id',
+            'tags.*.id'        => 'exists:tags,id',
         ]);
 
         $card->update(
@@ -64,7 +64,8 @@ class CardController extends AsyncController
         );
 
         if (isset($validated['tags'])) {
-            $card->tags()->sync($validated['tags']);
+            $tagIds = collect($validated['tags'])->pluck('id');
+            $card->tags()->sync($tagIds);
         }
 
         return response()->json([

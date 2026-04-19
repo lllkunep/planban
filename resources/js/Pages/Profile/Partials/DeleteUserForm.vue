@@ -4,6 +4,9 @@ import Modal from '@/Components/Common/Modal.vue';
 import FormField from '@/Components/Form/FormField.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes();
 
 const passwordInput = ref(null);
 
@@ -12,7 +15,7 @@ const form = useForm({
 });
 
 const deleteUser = () => {
-    form.delete(route('profile.destroy'), {
+    form.delete(routes.profile.destroy(), {
         preserveScroll: true,
         onSuccess: () => closeModal(),
         onError: () => passwordInput.value.focus(),

@@ -3,6 +3,9 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import Button from "@/Components/Common/Button.vue";
 import FormField from "@/Components/Form/FormField.vue";
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes();
 
 const form = useForm({
     name: '',
@@ -12,7 +15,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('register'), {
+    form.post(routes.register(), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
@@ -68,7 +71,7 @@ const submit = () => {
                             Register
                         </Button>
                         <Link
-                            :href="route('login')"
+                            :href="routes.login()"
                             class="float-end link-secondary"
                         >
                             Already registered?

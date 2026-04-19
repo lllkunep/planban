@@ -4,6 +4,9 @@ import TagList from "@/Pages/Board/Edit/Partial/Includes/TagList.vue";
 import {useForm, usePage} from "@inertiajs/vue3";
 import OneLineTextForm from "@/Components/Form/OneLineTextForm.vue";
 import {computed} from "vue";
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes();
 
 const page = usePage();
 
@@ -19,7 +22,7 @@ const boardSettingsForm = useForm({
 });
 
 function save() {
-    boardSettingsForm.patch(route('boards.update', board.value.id), {
+    boardSettingsForm.patch(routes.boards.update(), {
         preserveState:  true,
         preserveScroll: true,
         onSuccess: () => {

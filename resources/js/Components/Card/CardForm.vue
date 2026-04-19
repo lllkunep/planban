@@ -1,15 +1,15 @@
 <script setup>
 
 import Textarea from "@/Components/Form/Textarea.vue";
-import {useForm, usePage} from '@inertiajs/vue3'
-import { computed } from 'vue'
 import FormField from "@/Components/Form/FormField.vue";
 import FormSelect from "@/Components/Form/FormSelect.vue";
 import Multiselect from "@/Components/Form/Multiselect.vue";
+import { useAxiosForm } from "@/composables/useAxiosForm.js";
+import { useBoard } from "@/composables/useBoard.js";
+import { useRoutes } from "@/composables/useRoutes.js";
 
-const page = usePage()
-
-const currentBoard = computed(() => page.props.currentBoard)
+const { currentBoard } = useBoard()
+const routes = useRoutes()
 
 const props = defineProps({
     card: {
@@ -18,7 +18,7 @@ const props = defineProps({
     },
 })
 
-const cardForm = useForm({
+const cardForm = useAxiosForm({
     assigned_user_id: props.card.assigned_user_id,
     name: props.card.name,
     text: props.card.text,
@@ -26,13 +26,7 @@ const cardForm = useForm({
 });
 
 function save() {
-    cardForm.transform(data => ({
-        ...data,
-        tags: data.tags.map(tag => tag.id)
-    })).patch(route('cards.update', props.card.id), {
-        preserveState:  true,
-        preserveScroll: true
-    })
+    cardForm.patch(routes.boards.cards.update(props.card));
 }
 
 defineExpose({ save })
@@ -55,7 +49,7 @@ defineExpose({ save })
             v-model="cardForm.assigned_user_id"
             id="assigned_user_id"
             label="Assigned user"
-            :options="[{id:null, name:'None'}].concat(currentBoard.boardMembers)"
+            :options="[{id:null, name:'None'}].concat(currentBoard.members)"
             :message="cardForm.errors.assigned_user_id"
         />
         <div class="row ps-3 g-3">
@@ -65,7 +59,7 @@ defineExpose({ save })
             <div class="col-10">
                 <Multiselect
                     id="tags"
-                    :options="currentBoard.boardTags"
+                    :options="currentBoard.tags"
                     v-model="cardForm.tags"
                     track-by="id"
                     label="name"

@@ -1,9 +1,12 @@
 <script setup>
 import OneLineTextForm from "@/Components/Form/OneLineTextForm.vue";
-import {useForm} from "@inertiajs/vue3";
 import axios from "axios";
 import {ref} from "vue";
 import IconButton from "@/Components/Common/IconButton.vue";
+import { useRoutes } from "@/composables/useRoutes.js";
+import { useAxiosForm } from "@/composables/useAxiosForm.js";
+
+const routes = useRoutes()
 
 const board = defineModel('board', {
     type: Object,
@@ -17,58 +20,47 @@ const props = defineProps({
     },
 })
 
-const newMemberForm = useForm({
+const newMemberForm = useAxiosForm({
     email: '',
 })
 
 const memberAddedMessage = ref(null);
 
-async function addMember() {
+function addMember() {
     memberAddedMessage.value = null;
 
-    const {data} = await axios.post(route('boards.addMember', props.board.id), newMemberForm.data());
-
-    if (data.error) {
-        newMemberForm.setError('email', data.error);
-    }
-    if (data.type === 'member') {
-        props.board.members.push(data.data);
-    } else if (data.type === 'invitation') {
-        props.board.invitations.push(data.data);
-    }
-
-    memberAddedMessage.value = data.message;
-    newMemberForm.reset();
+    newMemberForm.post(routes.boards.users.attach(), {
+        onSuccess: (response) => {
+            if (response.type === 'member') {
+                props.board.members.push(response.data);
+            } else if (response.type === 'invitation') {
+                props.board.invitations.push(response.data);
+            }
+            newMemberForm.reset();
+        }
+    })
 }
 
 async function changeMemberRole(member, event) {
-    const {data} = await axios.patch(route('boards.changeRole', props.board.id), {
-        user_id: member.id,
+    const { response } = await axios.patch(routes.boards.users.changeRole(member), {
         role: event.target.value,
     });
 
-    member.pivot.role = data.pivot.role;
+    member.pivot.role = response.data.pivot.role;
 }
 
 async function removeMember(member) {
     if (!confirm(`Delete member "${member.name}"?`)) return
 
-    const {data} = await axios.delete(route('boards.removeMember', props.board.id), {
-        data: {
-            user_id: member.id,
-        }
-    });
+    const { response } = await axios.delete(routes.boards.users.detach(member));
+
     props.board.members = props.board.members.filter(m => m.id !== member.id);
 }
 
 async function removeInvitation(invitation) {
     if (!confirm(`Delete invitation "${invitation.email}"?`)) return
 
-    const {data} = await axios.delete(route('boards.removeInvitation', props.board.id), {
-        data: {
-            invitation_id: invitation.id,
-        }
-    });
+    const { response } = await axios.delete(routes.boards.removeInvitation(props.board, invitation));
     props.board.invitations = props.board.invitations.filter(i => i.id !== invitation.id);
 }
 

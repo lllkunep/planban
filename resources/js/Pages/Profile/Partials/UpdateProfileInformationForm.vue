@@ -2,6 +2,9 @@
 import FormField from '@/Components/Form/FormField.vue';
 import Button from '@/Components/Common/Button.vue';
 import {useForm, usePage} from "@inertiajs/vue3";
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes();
 
 const user = usePage().props.auth.user;
 
@@ -24,7 +27,7 @@ const form = useForm({
         </header>
 
         <form
-            @submit.prevent="form.patch(route('profile.update'))"
+            @submit.prevent="form.patch(routes.profile.update())"
         >
             <FormField
                 id="name"

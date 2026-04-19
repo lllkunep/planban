@@ -51,16 +51,9 @@ class HandleInertiaRequests extends Middleware
 
                 if (!$request->user()->can('view', $board)) return null;
 
-                $board->loadMissing([
-                    'members:id,name,email',
-                    'tags:id,board_id,name,color',
-                ]);
+                $board->loadMissing(['members','tags']);
 
-                return [
-                    'boardId'      => $board->id,
-                    'boardMembers' => $board->members,
-                    'boardTags'    => $board->tags,
-                ];
+                return $board;
             },
 
             'flash' => [

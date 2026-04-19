@@ -3,13 +3,16 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import Button from "@/Components/Common/Button.vue";
 import FormField from "@/Components/Form/FormField.vue";
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes();
 
 const form = useForm({
     password: '',
 });
 
 const submit = () => {
-    form.post(route('password.confirm'), {
+    form.post(routes.password.confirm(), {
         onFinish: () => form.reset(),
     });
 };

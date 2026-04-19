@@ -3,6 +3,10 @@ import Navbar from "@/Components/Nav/Navbar.vue";
 import NavLink from "@/Components/Nav/NavLink.vue";
 import Dropdown from "@/Components/Nav/Dropdown.vue";
 import DropdownLink from "@/Components/Nav/DropdownLink.vue";
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes();
+
 </script>
 
 <template>
@@ -12,7 +16,7 @@ import DropdownLink from "@/Components/Nav/DropdownLink.vue";
         </template>
         <template #nav-items>
             <NavLink
-                :href="route('dashboard')"
+                :href="routes.dashboard()"
                 :active="route().current('dashboard')"
             >
                 Dashboard
@@ -23,12 +27,12 @@ import DropdownLink from "@/Components/Nav/DropdownLink.vue";
                 :title="$page.props.auth.user.name"
             >
                 <DropdownLink
-                    :href="route('profile.edit')"
+                    :href="routes.profile.edit()"
                 >
                     Profile
                 </DropdownLink>
                 <DropdownLink
-                    :href="route('logout')"
+                    :href="routes.logout()"
                     method="post"
                     as="button"
                 >

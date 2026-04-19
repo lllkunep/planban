@@ -2,6 +2,9 @@
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link } from '@inertiajs/vue3';
 import NavLink from "../Components/Nav/NavLink.vue";
+import { useRoutes } from "@/composables/useRoutes.js";
+const routes = useRoutes();
+
 </script>
 
 <template>
@@ -15,13 +18,13 @@ import NavLink from "../Components/Nav/NavLink.vue";
             <div class="d-flex">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <NavLink
-                        :href="route('login')"
+                        :href="routes.login()"
                         :active="route().current('login')"
                     >
                         Login
                     </NavLink>
                     <NavLink
-                        :href="route('register')"
+                        :href="routes.register()"
                         :active="route().current('register')"
                     >
                         Register

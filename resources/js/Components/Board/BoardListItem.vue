@@ -1,5 +1,9 @@
 <script setup>
 import {Link} from "@inertiajs/vue3";
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes();
+
 const props = defineProps({
     board: {
         type: Object,
@@ -13,7 +17,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <Link :href="route('boards.show', board.id)"
+    <Link :href="routes.boards.show(board)"
           class="list-group-item list-group-item-action"
           :class="{ 'active': active }"
     >

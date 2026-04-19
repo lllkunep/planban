@@ -1,7 +1,10 @@
 <script setup>
 import Tag from "@/Components/Common/Tag.vue";
 import IconButton from "@/Components/Common/IconButton.vue";
-import { useForm } from "@inertiajs/vue3";
+import { useRoutes } from "@/composables/useRoutes.js";
+import { useAxiosForm } from "@/composables/useAxiosForm.js";
+
+const routes = useRoutes()
 
 const tag = defineModel('tag', {
     type: Object,
@@ -10,43 +13,34 @@ const tag = defineModel('tag', {
 
 const emits = defineEmits(['tag-added', 'tag-deleted']);
 
-const form = useForm({
+const form = useAxiosForm({
     name: tag.value.name,
     color: tag.value.color,
     board_id: tag.value.board_id,
 })
 
-async function add(){
+function add(){
     if (tag.value.id) return
 
-    try {
-        const {data} = await axios.post(route('tags.store'), form);
-        if (data.errors) {
-            form.setError(data.errors);
-        } else {
+    form.post(routes.boards.tags.store(), {
+        onSuccess: (response) => {
+            const data = response.data;
             tag.value = { id: data.id, name: data.name, color: data.color, board_id: data.board_id };
             emits('tag-added');
         }
-    } catch (error) {
-        if (error.response?.status === 422) {
-            form.setError('name',error.response.data.message);
-        }
-    }
+    });
 }
 
 function update(){
     if (!tag.value.id) return
 
-    form.patch(route('tags.update', tag.value.id), {
-        preserveState:  true,
-        preserveScroll: true,
-    })
+    form.patch(routes.boards.tags.update(tag.value));
 }
 
 async function destroy() {
     if (!confirm(`Delete tag "${tag.value.name}"?`)) return
 
-    await axios.delete(route('tags.destroy', tag.value.id));
+    await axios.delete(routes.boards.tags.destroy(tag.value));
 
     emits('tag-deleted', tag.value.id);
 }

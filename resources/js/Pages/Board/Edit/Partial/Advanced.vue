@@ -2,32 +2,36 @@
 
 import OneLineDropdownForm from "@/Components/Form/OneLineDropdownForm.vue";
 import Button from "@/Components/Common/Button.vue";
-import {router, useForm} from "@inertiajs/vue3";
-import axios from "axios";
+import {router} from "@inertiajs/vue3";
+import { useAxiosForm } from "@/composables/useAxiosForm.js";
+import { useRoutes } from "@/composables/useRoutes.js";
+
+const routes = useRoutes()
 
 const board = defineModel('board', {
     type: Object,
     required: true,
 })
 
-const form = useForm({
+const form = useAxiosForm({
     user_id: board.value.members.find(m => m.pivot.role === 'owner')?.id,
 })
 
-async function setNewOwner() {
+function setNewOwner() {
     if(!confirm('Are you sure you want to change owner?')) return;
 
-    const {data} = await axios.patch(route('boards.setNewOwner', board.value.id), {
-        user_id: form.user_id
+    form.patch(routes.boards.users.setNewOwner(form.user_id), {
+        onSuccess: (response) => {
+            board.value.members.find(m => m.pivot.role === 'owner').pivot.role = 'admin';
+            board.value.members.find(m => m.id === form.user_id).pivot.role = 'owner';
+        }
     });
-    board.value.members.find(m => m.pivot.role === 'owner').pivot.role = 'admin';
-    board.value.members.find(m => m.id === form.user_id).pivot.role = 'owner';
 }
 
 function deleteBoard(){
     if(!confirm('Are you sure you want to delete this board?')) return;
 
-    router.delete(route('boards.destroy', board.value.id))
+    router.delete(routes.boards.destroy(board.value));
 }
 </script>
 
@@ -42,6 +46,7 @@ function deleteBoard(){
         label_by="name"
         buttonText="Change"
         @submit="setNewOwner"
+        :message="form.errors.user_id"
     />
     <h4 class="text-danger mt-5">
         Delete board

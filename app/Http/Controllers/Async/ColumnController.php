@@ -13,8 +13,7 @@ class ColumnController extends AsyncController
     public function store(Request $request, Board $board)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'position' => 'required|integer|min:0',
+            'name' => 'required|string|max:255'
         ]);
 
         $column = $board->columns()->create($validated);
