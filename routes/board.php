@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Async\BoardUserController;
+use App\Http\Controllers\Async\CardController;
 use App\Http\Controllers\Async\TagController;
 use App\Http\Controllers\BoardController;
-use App\Http\Controllers\CardController;
 use App\Http\Controllers\ColumnController;
 use App\Http\Middleware\EnsureUserIsBoardMember;
 use App\Http\Middleware\HasAccessToBoard;
@@ -38,7 +38,13 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{column}', 'destroy')->name('columns.destroy');
         });
 
+        Route::prefix('{board}/columns/{column}/cards')->controller(CardController::class)->group(function () {
+            Route::post('/', [CardController::class, 'store'])->name('cards.store');
+            Route::patch('/{card}', [CardController::class, 'move'])->name('cards.move');
+        });
+
         Route::prefix('{board}/cards')->controller(CardController::class)->group(function () {
+            Route::get('/{card}', 'show')->name('cards.show');
             Route::post('/', 'store')->name('cards.store');
             Route::patch('/{card}', 'update')->name('cards.update');
             Route::delete('/{card}', 'destroy')->name('cards.destroy');

@@ -23,6 +23,12 @@ class Column extends Model
         return $this->hasMany(Card::class);
     }
 
+    public function belongsToBoard(Board $board): bool
+    {
+        return $this->board_id === $board->id;
+    }
+
+
     protected static function booted(): void
     {
         static::addGlobalScope('order', function ($query) {
