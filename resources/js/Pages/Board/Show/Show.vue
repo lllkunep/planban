@@ -4,8 +4,8 @@ import { Head } from '@inertiajs/vue3'
 import axios from 'axios'
 import draggable from 'vuedraggable'
 import BoardLayout from '@/Layouts/BoardLayout.vue'
-import Column from '@/Components/Board/Column.vue'
-import CardSidebar from '@/Components/Card/CardSidebar.vue'
+import Column from '@/Pages/Board/Show/Includes/Column.vue'
+import CardShow from '@/Pages/Card/Show.vue'
 import {useRoutes} from "@/composables/useRoutes.js";
 import { useBoard } from "@/composables/useBoard.js";
 
@@ -74,7 +74,7 @@ function handleColumnChange(event) {
                 />
             </template>
         </draggable>
-        <CardSidebar
+        <CardShow
             :card="selectedCard"
             :loading="sidebarLoading"
             @close="closeCard"

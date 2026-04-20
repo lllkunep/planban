@@ -1,10 +1,10 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import Comment from "./Comment.vue";
-import NewCommentForm from "./NewCommentForm.vue";
-import History from "./History.vue";
-import CardForm from "./CardForm.vue";
-import Button from "../Common/Button.vue";
+import Comment from "@/Pages/Card/Includes/Comment.vue";
+import NewCommentForm from "@/Pages/Card/Includes/NewCommentForm.vue";
+import History from "@/Pages/Card/Includes/History.vue";
+import CardForm from "@/Pages/Card/Partial/CardForm.vue";
+import Button from "@/Components/Common/Button.vue";
 
 const emit = defineEmits(['close']);
 

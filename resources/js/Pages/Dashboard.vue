@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import BoardListItem from "@/Components/Board/BoardListItem.vue";
+import BoardListItem from "@/Layouts/Includes/BoardListItem.vue";
 
 defineProps({
     boards: {

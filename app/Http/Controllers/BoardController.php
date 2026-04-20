@@ -27,7 +27,7 @@ class BoardController extends Controller
 
         $board->load('columns.cards');
 
-        return Inertia::render('Board/Show', [
+        return Inertia::render('Board/Show/Show', [
             'board' => $board,
         ]);
     }

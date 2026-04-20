@@ -1,6 +1,6 @@
 <script setup>
 
-import BoardListItem from "@/Components/Board/BoardListItem.vue";
+import BoardListItem from "@/Layouts/Includes/BoardListItem.vue";
 import Button from "@/Components/Common/Button.vue";
 import { useRoutes } from "@/composables/useRoutes.js";
 import { useBoard} from "@/composables/useBoard.js";
