@@ -7,15 +7,11 @@ import BoardLayout from '@/Layouts/BoardLayout.vue'
 import Column from '@/Components/Board/Column.vue'
 import CardSidebar from '@/Components/Card/CardSidebar.vue'
 import {useRoutes} from "@/composables/useRoutes.js";
+import { useBoard } from "@/composables/useBoard.js";
+
+const { currentBoard } = useBoard()
 
 const routes = useRoutes()
-
-const props = defineProps({
-    board: {
-        type: Object,
-        required: true,
-    },
-})
 
 function moveCard(column, card, position) {
     axios.patch(routes.boards.cards.move(column, card), { position: position })
@@ -36,11 +32,11 @@ function closeCard() {
     selectedCard.value = null
 }
 
-const localColumns = ref([...props.board.columns])
-localColumns.value.push({id: null, name: '', cards: [], board_id: props.board.id, position: localColumns.value.length})
+const localColumns = ref([...currentBoard.value.columns])
+localColumns.value.push({id: null, name: '', cards: [], board_id: currentBoard.value.id, position: localColumns.value.length})
 
 function columnAdded(){
-    localColumns.value.push({id: null, name: '', cards: [], board_id: props.board.id, position: localColumns.value.length})
+    localColumns.value.push({id: null, name: '', cards: [], board_id: currentBoard.value.id, position: localColumns.value.length})
 }
 
 async function columnDeleted(columnId) {
@@ -56,7 +52,7 @@ function handleColumnChange(event) {
 </script>
 
 <template>
-    <Head :title="'PlanBan: ' + board.name" />
+    <Head :title="'PlanBan: ' + currentBoard.name" />
     <BoardLayout>
         <draggable
             v-model="localColumns"

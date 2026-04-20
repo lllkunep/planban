@@ -26,7 +26,11 @@ const cardForm = useAxiosForm({
 });
 
 function save() {
-    cardForm.patch(routes.boards.cards.update(props.card));
+    cardForm.patch(routes.boards.cards.update(props.card), {
+        onSuccess: (data) => {
+            currentBoard.value.columns.find(c => c.id === props.card.column_id).cards.find(c => c.id === props.card.id).name = data.data.name
+        },
+    });
 }
 
 defineExpose({ save })
