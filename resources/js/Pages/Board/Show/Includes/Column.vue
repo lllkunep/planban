@@ -7,8 +7,10 @@ import UnborderedInput from "@/Components/Form/UnborderedInput.vue";
 import IconButton from "@/Components/Common/IconButton.vue";
 import AddCardForm from "@/Pages/Board/Show/Includes/AddCardForm.vue";
 import {useRoutes} from "@/composables/useRoutes.js";
-// TODO: make validations
 const routes = useRoutes()
+import { useToast }     from '@/composables/useToast'
+
+const toast  = useToast()
 
 const props = defineProps({
     column: {
@@ -17,9 +19,9 @@ const props = defineProps({
     },
 })
 
-const emit = defineEmits(['card-selected', 'card-moved', 'column-added', 'column-deleted' ])
+const lastName = ref(props.column.name)
 
-const localCards = ref([...props.column.cards])
+const emit = defineEmits(['card-move-start', 'card-selected', 'card-moved', 'column-added', 'column-deleted' ])
 
 function handleChange(event) {
     const item = event.added ?? event.moved
@@ -33,31 +35,50 @@ async function submitAddCard(newCardName) {
     const name = newCardName
     if (!name) return
 
-    const { data } = await axios.post(routes.boards.cards.store(props.column), {
-        name: name,
-    })
+    try {
+        const { data } = await axios.post(routes.boards.cards.store(props.column), {
+            name: name,
+        })
 
-    localCards.value.push(data.data)
+        props.column.cards.push(data.data)
+    } catch (error) {
+        const message = error.response?.data.message ?? 'Something went wrong';
+        toast.error(message)
+    }
 }
 
 async function changeColumnName(event) {
     const newName = event.target.value
     if (!newName) return
 
-    if (!props.column.id) {
-        const { data } = await axios.post(routes.boards.columns.store(), props.column)
-        props.column.id = data.data.id
-        emit('column-added')
-    } else {
-        await axios.patch(routes.boards.columns.update(props.column), {
-            name: newName,
-        })
+    try{
+        if (!props.column.id) {
+            props.column.name = newName
+            const { data } = await axios.post(routes.boards.columns.store(), props.column)
+            props.column.id = data.data.id
+            emit('column-added')
+        } else {
+            await axios.patch(routes.boards.columns.update(props.column), {
+                name: newName,
+            })
+        }
+        lastName.value = props.column.name
+    } catch (error) {
+        props.column.name = lastName.value
+        event.target.value = lastName.value
+        const message = error.response?.data.message ?? 'Something went wrong';
+        toast.error(message)
     }
 }
 
 async function deleteColumn(columnId) {
-    await axios.delete(routes.boards.columns.destroy(props.column))
-    emit('column-deleted', columnId)
+    try {
+        await axios.delete(routes.boards.columns.destroy(props.column))
+        emit('column-deleted', columnId)
+    } catch (error) {
+        const message = error.response?.data.message ?? 'Something went wrong';
+        toast.error(message)
+    }
 }
 
 </script>
@@ -77,18 +98,18 @@ async function deleteColumn(columnId) {
             <IconButton
                 icon="trash"
                 @mousedown.stop
-                :class="{'disabled': localCards.length > 0}"
-                :title="localCards.length > 0 ? 'Cannot delete non-empty column' : ''"
+                :class="{'disabled': props.column.cards.length > 0}"
+                :title="props.column.cards.length > 0 ? 'Cannot delete non-empty column' : ''"
                 v-if="column.id"
-                @click="localCards.length === 0 && deleteColumn(column.id)"
-                style="pointer-events: auto;cursor: not-allowed;"
+                @click="props.column.cards.length === 0 && deleteColumn(column.id)"
+                :style="props.column.cards.length > 0 ? 'pointer-events: none; cursor: not-allowed;' : ''"
             />
         </div>
 
         <AddCardForm v-if="column.id" :on-submit="submitAddCard"/>
 
         <draggable
-            v-model="localCards"
+            v-model="props.column.cards"
             group="cards"
             item-key="id"
             class="rounded-bottom p-2"
@@ -96,6 +117,7 @@ async function deleteColumn(columnId) {
             ghost-class="drag-ghost"
             drag-class="drag-active"
             @change="handleChange"
+            @start="emit('card-move-start')"
         >
             <template #item="{ element }">
                 <CardItem :card="element" @card-selected="emit('card-selected', $event)" />
