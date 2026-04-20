@@ -4,12 +4,14 @@ import NavLink from "@/Components/Nav/NavLink.vue";
 import Dropdown from "@/Components/Nav/Dropdown.vue";
 import DropdownLink from "@/Components/Nav/DropdownLink.vue";
 import { useRoutes } from "@/composables/useRoutes.js";
+import ToastList from "@/Components/ToastList.vue";
 
 const routes = useRoutes();
 
 </script>
 
 <template>
+    <ToastList />
     <Navbar>
         <template #sidebar-toggler>
             <slot name="sidebar-toggler" />
