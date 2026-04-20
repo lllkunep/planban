@@ -1,4 +1,3 @@
-import { route } from 'ziggy-js'
 import { useBoard } from '@/composables/useBoard'
 
 export function useRoutes() {
@@ -25,7 +24,7 @@ export function useRoutes() {
 
             cards: {
                 show: (card) => route('boards.cards.show', [b(), id(card)]),
-                store: () => route('boards.cards.store', b()),
+                store: (col) => route('boards.cards.store', [b(), id(col)]),
                 update: (card) => route('boards.cards.update', [b(), id(card)]),
                 destroy: (card) => route('boards.cards.destroy', [b(), id(card)]),
                 move: (col, card) => route('boards.cards.move', [b(), id(col), id(card)]),

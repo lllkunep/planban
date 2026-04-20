@@ -49,7 +49,7 @@ const verificationLinkSent = computed(
                             Resend Verification Email
                         </Button>
                         <Link
-                            :href="routes.logout()"
+                            :href="routes.auth.logout()"
                             method="post"
                             as="button"
                             class="float-end link-secondary"

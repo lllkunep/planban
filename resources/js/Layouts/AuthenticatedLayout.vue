@@ -32,7 +32,7 @@ const routes = useRoutes();
                     Profile
                 </DropdownLink>
                 <DropdownLink
-                    :href="routes.logout()"
+                    :href="routes.auth.logout()"
                     method="post"
                     as="button"
                 >

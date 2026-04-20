@@ -1,80 +1,64 @@
-import {ref, reactive} from 'vue'
+import { reactive } from 'vue'
 import axios from 'axios'
 
 export function useAxiosForm(initialData = {}) {
-    const data = reactive({...initialData})
-    const errors = ref({})
-    const processing = ref(false)
-    const wasSuccess = ref(false)
+    const defaults = { ...initialData }
 
-    function reset() {
-        Object.assign(data, initialData)
-        errors.value = {}
-        wasSuccess.value = false
+    const form = reactive({
+        ...initialData,
+        errors: {},
+        processing: false,
+        wasSuccess: false,
+    })
+
+    function getData() {
+        return Object.fromEntries(
+            Object.keys(defaults).map(key => [key, form[key]])
+        )
     }
 
-    function clearErrors(...fields) {
-        if (fields.length === 0) {
-            errors.value = {}
-            return
-        }
-        fields.forEach(field => delete errors.value[field])
+    form.reset = () => {
+        Object.assign(form, defaults)
+        form.errors = {}
+        form.wasSuccess = false
     }
 
-    function setError(field, message) {
-        errors.value[field] = [message]
+    form.clearErrors = (...keys) => {
+        if (keys.length === 0) { form.errors = {}; return }
+        keys.forEach(key => delete form.errors[key])
+    }
+
+    form.setError = (field, message) => {
+        form.errors[field] = [message]
     }
 
     async function submit(method, url, options = {}) {
-        processing.value = true
-        wasSuccess.value = false
-        errors.value = {}
+        form.processing = true
+        form.wasSuccess = false
+        form.errors = {}
 
         try {
-            const response = await axios[method](url, data)
-
-            wasSuccess.value = true
-
-            if (options.onSuccess) {
-                options.onSuccess(response)
-            }
-
-            return response
-
+            const response = await axios[method](url, getData())
+            form.wasSuccess = true
+            if (options.onSuccess) options.onSuccess(response.data)
+            return response.data
         } catch (error) {
             if (error.response?.status === 422) {
-                errors.value = error.response.data.errors ?? {}
+                form.errors = error.response.data.errors ?? {}
             }
-
-            if (options.onError) {
-                options.onError(error.response?.data)
-            }
-
+            if (options.onError) options.onError(error.response?.data)
             throw error
-
         } finally {
-            processing.value = false
-
-            if (options.onFinish) {
-                options.onFinish()
-            }
+            form.processing = false
+            if (options.onFinish) options.onFinish()
         }
     }
 
-    return {
-        data,
-        errors,
-        processing,
-        wasSuccess,
+    form.get    = (url, opts) => submit('get',    url, opts)
+    form.post   = (url, opts) => submit('post',   url, opts)
+    form.patch  = (url, opts) => submit('patch',  url, opts)
+    form.put    = (url, opts) => submit('put',    url, opts)
+    form.delete = (url, opts) => submit('delete', url, opts)
 
-        reset,
-        clearErrors,
-        setError,
-
-        get: (url, options) => submit('get', url, options),
-        post: (url, options) => submit('post', url, options),
-        patch: (url, options) => submit('patch', url, options),
-        put: (url, options) => submit('put', url, options),
-        delete: (url, options) => submit('delete', url, options),
-    }
+    return form
 }

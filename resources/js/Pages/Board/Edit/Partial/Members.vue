@@ -42,17 +42,17 @@ function addMember() {
 }
 
 async function changeMemberRole(member, event) {
-    const { response } = await axios.patch(routes.boards.users.changeRole(member), {
+    const { data } = await axios.patch(routes.boards.users.changeRole(member), {
         role: event.target.value,
     });
 
-    member.pivot.role = response.data.pivot.role;
+    member.pivot.role = data.data.pivot.role;
 }
 
 async function removeMember(member) {
     if (!confirm(`Delete member "${member.name}"?`)) return
 
-    const { response } = await axios.delete(routes.boards.users.detach(member));
+    const { data } = await axios.delete(routes.boards.users.detach(member));
 
     props.board.members = props.board.members.filter(m => m.id !== member.id);
 }
@@ -60,7 +60,7 @@ async function removeMember(member) {
 async function removeInvitation(invitation) {
     if (!confirm(`Delete invitation "${invitation.email}"?`)) return
 
-    const { response } = await axios.delete(routes.boards.removeInvitation(props.board, invitation));
+    const { data } = await axios.delete(routes.boards.removeInvitation(invitation));
     props.board.invitations = props.board.invitations.filter(i => i.id !== invitation.id);
 }
 

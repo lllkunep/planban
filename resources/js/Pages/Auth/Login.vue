@@ -24,7 +24,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(routes.login(), {
+    form.post(routes.auth.login(), {
         onFinish: () => form.reset('password'),
     });
 };

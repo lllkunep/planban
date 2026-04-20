@@ -18,13 +18,13 @@ const routes = useRoutes();
             <div class="d-flex">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <NavLink
-                        :href="routes.login()"
+                        :href="routes.auth.login()"
                         :active="route().current('login')"
                     >
                         Login
                     </NavLink>
                     <NavLink
-                        :href="routes.register()"
+                        :href="routes.auth.register()"
                         :active="route().current('register')"
                     >
                         Register

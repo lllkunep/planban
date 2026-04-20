@@ -31,7 +31,7 @@ function setNewOwner() {
 function deleteBoard(){
     if(!confirm('Are you sure you want to delete this board?')) return;
 
-    router.delete(routes.boards.destroy(board.value));
+    router.delete(routes.boards.destroy());
 }
 </script>
 

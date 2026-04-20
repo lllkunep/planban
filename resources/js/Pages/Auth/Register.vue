@@ -15,7 +15,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(routes.register(), {
+    form.post(routes.auth.register(), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
@@ -71,7 +71,7 @@ const submit = () => {
                             Register
                         </Button>
                         <Link
-                            :href="routes.login()"
+                            :href="routes.auth.login()"
                             class="float-end link-secondary"
                         >
                             Already registered?

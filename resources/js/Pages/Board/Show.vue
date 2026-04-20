@@ -27,8 +27,8 @@ const sidebarLoading = ref(false)
 async function openCard(card) {
     selectedCard.value = card
     sidebarLoading.value = true
-    const { response } = await axios.get(routes.boards.cards.show(card))
-    selectedCard.value = response.data
+    const { data } = await axios.get(routes.boards.cards.show(card))
+    selectedCard.value = data.data
     sidebarLoading.value = false
 }
 

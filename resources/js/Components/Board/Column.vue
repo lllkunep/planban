@@ -33,11 +33,11 @@ async function submitAddCard(newCardName) {
     const name = newCardName
     if (!name) return
 
-    const { response } = await axios.post(routes.boards.cards.store(props.column), {
+    const { data } = await axios.post(routes.boards.cards.store(props.column), {
         name: name,
     })
 
-    localCards.value.push(response.data)
+    localCards.value.push(data.data)
 }
 
 async function changeColumnName(event) {
@@ -45,8 +45,8 @@ async function changeColumnName(event) {
     if (!newName) return
 
     if (!props.column.id) {
-        const { response } = await axios.post(routes.boards.columns.store(), props.column)
-        props.column.id = response.data.id
+        const { data } = await axios.post(routes.boards.columns.store(), props.column)
+        props.column.id = data.data.id
         emit('column-added')
     } else {
         await axios.patch(routes.boards.columns.update(props.column), {
