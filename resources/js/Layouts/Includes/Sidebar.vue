@@ -12,8 +12,11 @@ const { currentBoard, boards } = useBoard();
 </script>
 
 <template>
-    <div class="collapse collapse-horizontal show vh-100 bg-light py-4 px-3" id="collapseWidthExample">
+    <div class="collapse collapse-horizontal show vh-100 bg-light pb-4 px-3" id="collapseWidthExample">
         <div class="list-group" style="width: 300px;">
+            <Button variant="light" class="w-100 list-group-item list-group-item-action border-0" :href="routes.dashboard()">
+                <i class="bi bi-card-list"></i> Dashboard
+            </Button>
             <Button variant="light" class="w-100 list-group-item list-group-item-action border-0">
                 <i class="bi bi-bell"></i> Notifications
             </Button>

@@ -1,6 +1,5 @@
 <script setup>
 import Navbar from "@/Components/Nav/Navbar.vue";
-import NavLink from "@/Components/Nav/NavLink.vue";
 import Dropdown from "@/Components/Nav/Dropdown.vue";
 import DropdownLink from "@/Components/Nav/DropdownLink.vue";
 import { useRoutes } from "@/composables/useRoutes.js";
@@ -15,14 +14,6 @@ const routes = useRoutes();
     <Navbar>
         <template #sidebar-toggler>
             <slot name="sidebar-toggler" />
-        </template>
-        <template #nav-items>
-            <NavLink
-                :href="routes.dashboard()"
-                :active="route().current('dashboard')"
-            >
-                Dashboard
-            </NavLink>
         </template>
         <template #nav-right>
             <Dropdown

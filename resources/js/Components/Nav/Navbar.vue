@@ -1,6 +1,5 @@
 <script setup>
 
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import {Link} from "@inertiajs/vue3";
 import { useRoutes } from "@/composables/useRoutes.js";
 
@@ -12,11 +11,6 @@ const routes = useRoutes();
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
         <slot name="sidebar-toggler" />
         <div class="container-sm">
-            <Link :href="routes.dashboard()">
-                <ApplicationLogo
-                    width="30" height="24"
-                />
-            </Link>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
