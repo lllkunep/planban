@@ -41,7 +41,8 @@ async function handleColumnChange(event) {
     const item = event.moved
     if (!item) return
     try {
-        await axios.patch(routes.boards.columns.move(item.element), { position: item.newIndex })
+        const newIndex = localColumns.value.length - 2 - item.newIndex
+        await axios.patch(routes.boards.columns.move(item.element), { position: newIndex, ololo: item.newIndex})
     } catch (error) {
         const message = error.response?.data.message ?? 'Something went wrong';
         toast.error(message)

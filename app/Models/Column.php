@@ -54,7 +54,7 @@ class Column extends Model
     protected static function booted(): void
     {
         static::addGlobalScope('order', function ($query) {
-            $query->orderBy('position', 'asc')->orderBy('id', 'desc');
+            $query->orderBy('position', 'desc')->orderBy('id', 'desc');
         });
     }
 }
