@@ -56,8 +56,9 @@ const id = useId();
                 </button>
             </div>
         </div>
-        <div class="text-danger" v-if="form.errors[field]">{{ form.errors[field] }}</div>
-        <div class="text-success" v-if="message">{{ message }}</div>
+        <div class="text-danger" v-if="form.errors" v-for="error in form.errors[field]">{{ error }}</div>
+        <div class="text-danger" v-else-if="form.errorMessage">{{ form.errorMessage }}</div>
+        <div class="text-success" v-if="form.successMessage">{{ form.successMessage }}</div>
     </form>
 </template>
 

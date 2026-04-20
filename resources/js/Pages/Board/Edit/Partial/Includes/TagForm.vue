@@ -37,12 +37,14 @@ function update(){
     form.patch(routes.boards.tags.update(tag.value));
 }
 
-async function destroy() {
+function destroy() {
     if (!confirm(`Delete tag "${tag.value.name}"?`)) return
 
-    await axios.delete(routes.boards.tags.destroy(tag.value));
-
-    emits('tag-deleted', tag.value.id);
+    form.delete(routes.boards.tags.destroy(tag.value), {
+        onSuccess: (response) => {
+            emits('tag-deleted', tag.value.id);
+        },
+    });
 }
 
 </script>
@@ -60,7 +62,8 @@ async function destroy() {
         <IconButton v-if="tag.id" class="ms-auto" icon="trash" variant="danger" type="button" @click="destroy" />
         <IconButton v-else class="ms-auto" icon="plus" variant="primary" />
     </form>
-    <div class="text-danger" v-for="error in form.errors"> {{ error }}</div>
+    <div class="text-danger" v-if="form.errorMessage"> {{ form.errorMessage }}</div>
+    <div class="text-success" v-if="form.successMessage"> {{ form.successMessage }}</div>
 </template>
 
 <style scoped>

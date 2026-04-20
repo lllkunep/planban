@@ -7,6 +7,8 @@ export function useAxiosForm(initialData = {}) {
     const form = reactive({
         ...initialData,
         errors: {},
+        successMessage: '',
+        errorMessage: '',
         processing: false,
         wasSuccess: false,
     })
@@ -40,14 +42,16 @@ export function useAxiosForm(initialData = {}) {
         try {
             const response = await axios[method](url, getData())
             form.wasSuccess = true
+            form.successMessage = response.data.message ?? ''
             if (options.onSuccess) options.onSuccess(response.data)
             return response.data
         } catch (error) {
             if (error.response?.status === 422) {
                 form.errors = error.response.data.errors ?? {}
+            } else {
+                form.errorMessage = error.response?.data.message ?? 'Something went wrong'
             }
             if (options.onError) options.onError(error.response?.data)
-            throw error
         } finally {
             form.processing = false
             if (options.onFinish) options.onFinish()

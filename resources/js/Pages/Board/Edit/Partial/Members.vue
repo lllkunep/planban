@@ -5,6 +5,7 @@ import {ref} from "vue";
 import IconButton from "@/Components/Common/IconButton.vue";
 import { useRoutes } from "@/composables/useRoutes.js";
 import { useAxiosForm } from "@/composables/useAxiosForm.js";
+import ListItemWithActions from "@/Components/Form/ListItemWithActions.vue";
 
 const routes = useRoutes()
 
@@ -24,11 +25,10 @@ const newMemberForm = useAxiosForm({
     email: '',
 })
 
-const memberAddedMessage = ref(null);
+const membersError = ref('')
+const invitationsError = ref('')
 
 function addMember() {
-    memberAddedMessage.value = null;
-
     newMemberForm.post(routes.boards.users.attach(), {
         onSuccess: (response) => {
             if (response.type === 'member') {
@@ -42,26 +42,39 @@ function addMember() {
 }
 
 async function changeMemberRole(member, event) {
-    const { data } = await axios.patch(routes.boards.users.changeRole(member), {
-        role: event.target.value,
-    });
+    try {
+        const { data } = await axios.patch(routes.boards.users.changeRole(member), {
+            role: event.target.value,
+        });
 
-    member.pivot.role = data.data.pivot.role;
+        member.pivot.role = data.data.pivot.role;
+    } catch (error) {
+        membersError.value = error.response?.data.message ?? 'Something went wrong';
+    }
 }
 
 async function removeMember(member) {
     if (!confirm(`Delete member "${member.name}"?`)) return
 
-    const { data } = await axios.delete(routes.boards.users.detach(member));
-
-    props.board.members = props.board.members.filter(m => m.id !== member.id);
+    try {
+        await axios.delete(routes.boards.users.detach(member));
+        props.board.members = props.board.members.filter(m => m.id !== member.id);
+    } catch (error) {
+        membersError.value = error.response?.data.message ?? 'Something went wrong';
+    }
 }
 
 async function removeInvitation(invitation) {
     if (!confirm(`Delete invitation "${invitation.email}"?`)) return
 
-    const { data } = await axios.delete(routes.boards.removeInvitation(invitation));
-    props.board.invitations = props.board.invitations.filter(i => i.id !== invitation.id);
+    try {
+        await axios.delete(routes.boards.removeInvitation(invitation));
+        props.board.invitations = props.board.invitations.filter(i => i.id !== invitation.id);
+    } catch (error) {
+        console.log(invitation)
+        console.error(error);
+        invitationsError.value = error.response?.data.message ?? 'Something went wrong';
+    }
 }
 
 </script>
@@ -77,39 +90,44 @@ async function removeInvitation(invitation) {
         buttonText="Add"
         @submit="addMember"
     />
-    <div class="text-success" v-if="memberAddedMessage">
-        {{ memberAddedMessage }}
-    </div>
 
     <hr>
 
     <h4 class="mt-4">Members</h4>
 
+    <div v-if="membersError" class="alert alert-danger" role="alert">
+        {{ membersError }}
+    </div>
     <ul class="list-group" style="max-width: 50rem;">
-        <li class="list-group-item d-flex justify-content-between align-items-center" v-for="member in board.members">
+        <ListItemWithActions
+            v-for="member in board.members"
+        >
             {{ member.name }} | {{ member.email }}
-            <div class="actions d-flex w-50 gap-1">
+            <template #actions>
                 <select class="form-select" aria-label="Role" :disabled="member.pivot.role === 'owner'" @change="changeMemberRole(member, $event)">
                     <option :selected="member.pivot.role === role.value" v-for="role in roles" :key="role.value" :value="role.value" :disabled="role.value === 'owner'">
                         {{ role.label }}
                     </option>
                 </select>
                 <IconButton icon="trash" variant="danger" :disabled="member.pivot.role === 'owner'" @click="removeMember(member)" />
-            </div>
-        </li>
+            </template>
+        </ListItemWithActions>
     </ul>
 
     <hr>
 
     <h4 class="mt-4">Invitations</h4>
 
+    <div v-if="invitationsError" class="alert alert-danger" role="alert">
+        {{ invitationsError }}
+    </div>
     <ul class="list-group" style="max-width: 50rem;">
-        <li class="list-group-item d-flex justify-content-between align-items-center" v-for="invitation in board.invitations">
+        <ListItemWithActions v-for="invitation in board.invitations">
             {{ invitation.email }}
-            <div class="actions d-flex gap-1">
+            <template #actions>
                 <IconButton icon="trash" variant="danger" @click="removeInvitation(invitation)"/>
-            </div>
-        </li>
+            </template>
+        </ListItemWithActions>
     </ul>
 
 </template>

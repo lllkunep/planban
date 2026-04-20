@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{user}', 'detach')->name('detach');
             Route::patch('/{user}/change-role', 'changeRole')->name('changeRole');
             Route::patch('/{user}/set-new-owner', 'setNewOwner')->name('setNewOwner');
-            Route::delete('/{board}/invitations/{invitation}', 'removeInvitation')->name('removeInvitation');
+            Route::delete('/invitations/{invitation}', 'removeInvitation')->name('removeInvitation');
         })->middleware(EnsureUserIsBoardMember::class);
 
         Route::prefix('{board}/columns')->controller(ColumnController::class)->group(function () {

@@ -46,7 +46,6 @@ function deleteBoard(){
         label_by="name"
         buttonText="Change"
         @submit="setNewOwner"
-        :message="form.errors.user_id"
     />
     <h4 class="text-danger mt-5">
         Delete board
