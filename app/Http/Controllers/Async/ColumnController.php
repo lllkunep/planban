@@ -28,7 +28,7 @@ class ColumnController extends AsyncController
     public function move(Request $request, Board $board, Column $column): JsonResponse
     {
         if (!$column->belongsToBoard($board)) {
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('Column not found in this board');
         }
 
         $validated = $request->validate([
@@ -47,7 +47,7 @@ class ColumnController extends AsyncController
     public function update(Request $request, Board $board, Column $column)
     {
         if (!$column->belongsToBoard($board)) {
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('Column not found in this board');
         }
 
         $validated = $request->validate([
@@ -65,7 +65,7 @@ class ColumnController extends AsyncController
     public function destroy(Board $board, Column $column)
     {
         if (!$column->belongsToBoard($board)) {
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('Column not found in this board');
         }
 
         $column->delete();

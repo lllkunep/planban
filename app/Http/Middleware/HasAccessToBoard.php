@@ -19,7 +19,7 @@ class HasAccessToBoard extends Middleware
         }
 
         if (!$board->hasUser($request->user())) {
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('Board not found');
         }
 
         return $next($request);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Async;
 
 use App\Models\Board;
 use App\Models\Tag;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
@@ -34,7 +35,7 @@ class TagController extends AsyncController
     public function update(Request $request, Board $board, Tag $tag)
     {
         if (!$tag->belongsToBoard($board)) {
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('Tag not found in this board');
         }
 
         $request->validate([
@@ -60,7 +61,7 @@ class TagController extends AsyncController
     public function destroy(Board $board, Tag $tag)
     {
         if (!$tag->belongsToBoard($board)) {
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('Tag not found in this board');
         }
 
         $tag->delete();

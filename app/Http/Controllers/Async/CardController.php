@@ -14,7 +14,7 @@ class CardController extends AsyncController
     public function show(Board $board, Card $card): JsonResponse
     {
         if (!$card->belongsToBoard($board)){
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('Card not found in this board');
         }
 
         $card->load(['assignedUsers', 'tags', 'comments.user', 'histories.user']);
@@ -29,7 +29,7 @@ class CardController extends AsyncController
     public function store(Request $request, Board $board, Column $column): JsonResponse
     {
         if (!$column->belongsToBoard($board)){
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('Column not found in this board');
         }
 
         $validated = $request->validate([
@@ -48,7 +48,7 @@ class CardController extends AsyncController
     public function update(Request $request, Board $board, Card $card): JsonResponse
     {
         if (!$card->belongsToBoard($board)){
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('Card not found in this board');
         }
 
         $validated = $request->validate([
@@ -78,7 +78,7 @@ class CardController extends AsyncController
     public function move(Request $request, Board $board, Column $column, Card $card): JsonResponse
     {
         if (!$column->belongsToBoard($board) || !$card->belongsToBoard($board)){
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('Column or card not found in this board');
         }
 
         $validated = $request->validate([
@@ -97,7 +97,7 @@ class CardController extends AsyncController
     public function destroy(Board $board, Card $card): JsonResponse
     {
         if (!$card->belongsToBoard($board)){
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('Card not found in this board');
         }
 
         $card->delete();

@@ -98,7 +98,7 @@ class BoardUserController extends AsyncController
 
     public function removeInvitation(Board $board, Invitation $invitation){
         if (!$invitation->belongsToBoard($board)) {
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('Invitation not found in this board');
         }
 
         $invitation->delete();

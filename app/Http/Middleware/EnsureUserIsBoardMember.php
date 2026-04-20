@@ -21,7 +21,7 @@ class EnsureUserIsBoardMember extends Middleware
         }
 
         if (!$board->hasUser($user)) {
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException('User not found in this board');
         }
 
         return $next($request);
