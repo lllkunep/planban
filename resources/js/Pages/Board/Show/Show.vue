@@ -15,6 +15,10 @@ const toast  = useToast()
 const { currentBoard } = useBoard()
 const routes = useRoutes()
 
+const props = defineProps({
+    initialCard: { type: Object, default: null },
+})
+
 const selectedCard = ref(null)
 const sidebarLoading = ref(false)
 const localColumns = ref([...currentBoard.value.columns])
@@ -23,6 +27,7 @@ let columnsSnapshot = []
 
 onMounted(() => {
     localColumns.value.push({id: null, name: '', cards: [], board_id: currentBoard.value.id, position: localColumns.value.length})
+    if (props.initialCard) openCard(props.initialCard)
 })
 
 function onStart() {
@@ -51,6 +56,7 @@ async function handleColumnChange(event) {
 }
 
 async function openCard(card) {
+    history.replaceState(null, '', routes.boards.onCard(card))
     try {
         selectedCard.value = card
         sidebarLoading.value = true
@@ -62,11 +68,13 @@ async function openCard(card) {
         toast.error(message)
         selectedCard.value = null
         sidebarLoading.value = false
+        history.replaceState(null, '', routes.boards.show(currentBoard.value))
     }
 }
 
 function closeCard() {
     selectedCard.value = null
+    history.replaceState(null, '', routes.boards.show(currentBoard.value))
 }
 
 async function moveCard(column, card, position) {

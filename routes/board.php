@@ -15,6 +15,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/create', 'create')->name('create');
             Route::post('/', 'store')->name('store');
             Route::get('/{board}', 'show')->name('show');
+            Route::get('/{board}/on/{card}', 'onCard')->name('onCard');
             Route::get('/{board}/edit', 'edit')->name('edit');
             Route::patch('/{board}', 'update')->name('update');
             Route::delete('/{board}', 'destroy')->name('destroy');

@@ -11,6 +11,7 @@ export function useRoutes() {
             create: () => route('boards.create'),
             store: () => route('boards.store'),
             show: (board) => route('boards.show', id(board)),
+            onCard: (card) => route('boards.onCard', [b(), id(card)]),
             update: () => route('boards.update', b()),
             destroy: () => route('boards.destroy', b()),
             edit: () => route('boards.edit', b()),

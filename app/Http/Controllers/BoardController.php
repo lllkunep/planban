@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\BoardRole;
 use App\Models\Board;
+use App\Models\Card;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -44,6 +45,19 @@ class BoardController extends Controller
 
         return Inertia::render('Board/Show/Show', [
             'board' => $board,
+        ]);
+    }
+
+    public function onCard(Board $board, Card $card): Response
+    {
+        $this->authorize('view', $board);
+
+        $board->load('columns.cards');
+        $card->load(['assignedUsers', 'tags', 'comments.user', 'histories.user']);
+
+        return Inertia::render('Board/Show/Show', [
+            'board'       => $board,
+            'initialCard' => $card,
         ]);
     }
 
