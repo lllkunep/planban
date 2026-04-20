@@ -4,10 +4,11 @@ export function useRoutes() {
     const { currentBoard } = useBoard()
 
     const id = (model) => typeof model === 'object' ? model.id : model
-    const b  = ()      => id(currentBoard.value)
+    const b  = ()      => currentBoard.value ? id(currentBoard.value) : 0
 
     return {
         boards: {
+            create: () => route('boards.create'),
             store: () => route('boards.store'),
             show: (board) => route('boards.show', id(board)),
             update: () => route('boards.update', b()),

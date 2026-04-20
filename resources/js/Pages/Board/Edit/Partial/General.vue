@@ -43,7 +43,6 @@ function save() {
         label="Board title"
         buttonText="Save"
         @submit="save"
-        :message="success"
     />
     <hr>
     <h3 class="mt-3">Tags</h3>

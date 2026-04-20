@@ -14,7 +14,7 @@ import Sidebar from '@/Layouts/Includes/Sidebar.vue';
         </AuthenticatedLayout>
         <div class="d-flex flex-grow-1 overflow-hidden">
             <Sidebar
-                :boardId="$page.props.board.id"
+                :boardId="$page.props.board ? $page.props.board.id : null"
             />
             <div class="flex-grow-1 overflow-auto">
                 <slot />

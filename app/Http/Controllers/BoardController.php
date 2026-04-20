@@ -10,12 +10,27 @@ use Inertia\Response;
 
 class BoardController extends Controller
 {
+    public function create()
+    {
+        return Inertia::render('Board/Create');
+    }
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+        ]);
+
+        $user = $request->user();
+        $board = Board::create([
+            'name' => $request->name,
+        ]);
+
+        $board->members()->attach($user->id, ['role' => 'owner']);
+
+        return redirect()->route('boards.show', $board);
     }
 
     /**

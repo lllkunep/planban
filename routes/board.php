@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
     Route::prefix('boards')->name('boards.')->group(function () {
         Route::controller(BoardController::class)->group(function () {
+            Route::get('/create', 'create')->name('create');
             Route::post('/', 'store')->name('store');
             Route::get('/{board}', 'show')->name('show');
             Route::get('/{board}/edit', 'edit')->name('edit');

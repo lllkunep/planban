@@ -20,14 +20,14 @@ const { currentBoard, boards } = useBoard();
             <Button variant="light" class="w-100 list-group-item list-group-item-action border-0" :href="routes.boards.edit()">
                 <i class="bi bi-gear"></i> Board settings
             </Button>
-            <Button variant="light" class="w-100 list-group-item list-group-item-action border-0" href="#">
+            <Button variant="light" class="w-100 list-group-item list-group-item-action border-0" :href="routes.boards.create()">
                 <i class="bi bi-clipboard-plus"></i> Create new board
             </Button>
         </div>
         <hr>
         <h5 class="ms-3">Board List:</h5>
         <div class="list-group" style="width: 300px;">
-            <BoardListItem v-for="board in boards" :key="board.id" :board="board" class="border-0" :active="board.id === currentBoard.id" />
+            <BoardListItem v-for="board in boards" :key="board.id" :board="board" class="border-0" :active="currentBoard ? board.id === currentBoard.id : false" />
         </div>
     </div>
 </template>
