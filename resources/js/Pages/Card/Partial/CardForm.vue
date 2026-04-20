@@ -11,24 +11,22 @@ import { useRoutes } from "@/composables/useRoutes.js";
 const { currentBoard } = useBoard()
 const routes = useRoutes()
 
-const props = defineProps({
-    card: {
-        type: Object,
-        required: true,
-    },
+const card = defineModel('card', {
+    type: Object,
+    required: true,
 })
 
 const cardForm = useAxiosForm({
-    assigned_user_id: props.card.assigned_user_id,
-    name: props.card.name,
-    text: props.card.text,
-    tags: props.card.tags,
+    assigned_user_id: card.value.assigned_user_id,
+    name: card.value.name,
+    text: card.value.text,
+    tags: card.value.tags,
 });
 
 function save() {
-    cardForm.patch(routes.boards.cards.update(props.card), {
+    cardForm.patch(routes.boards.cards.update(card.value), {
         onSuccess: (data) => {
-            currentBoard.value.columns.find(c => c.id === props.card.column_id).cards.find(c => c.id === props.card.id).name = data.data.name
+            Object.assign(card.value, data.data)
         },
     });
 }

@@ -55,13 +55,22 @@ async function handleColumnChange(event) {
     }
 }
 
+function findCardInBoard(cardId) {
+    for (const col of currentBoard.value.columns) {
+        const found = col.cards.find(c => c.id == cardId)
+        if (found) return found
+    }
+    return null
+}
+
 async function openCard(card) {
     history.replaceState(null, '', routes.boards.onCard(card))
     try {
-        selectedCard.value = card
         sidebarLoading.value = true
+        const boardCard = findCardInBoard(card.id)
+        selectedCard.value = boardCard ?? card
         const { data } = await axios.get(routes.boards.cards.show(card))
-        selectedCard.value = data.data
+        Object.assign(selectedCard.value, data.data)
         sidebarLoading.value = false
     } catch (error) {
         const message = error.response?.data.message ?? 'Something went wrong';

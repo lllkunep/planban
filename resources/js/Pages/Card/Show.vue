@@ -8,11 +8,12 @@ import Button from "@/Components/Common/Button.vue";
 
 const emit = defineEmits(['close']);
 
+const card = defineModel('card', {
+    type: Object,
+    default: null,
+})
+
 const props = defineProps({
-    card: {
-        type: Object,
-        default: null,
-    },
     loading: {
         type: Boolean,
         default: false,
