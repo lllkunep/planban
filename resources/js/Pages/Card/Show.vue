@@ -1,10 +1,9 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import Comment from "@/Pages/Card/Includes/Comment.vue";
-import NewCommentForm from "@/Pages/Card/Includes/NewCommentForm.vue";
-import History from "@/Pages/Card/Includes/History.vue";
 import CardForm from "@/Pages/Card/Partial/CardForm.vue";
 import Button from "@/Components/Common/Button.vue";
+import Comments from "./Partial/Comments.vue";
+import Histories from "@/Pages/Card/Partial/Histories.vue";
 
 const emit = defineEmits(['close']);
 
@@ -47,20 +46,10 @@ const cardForm = ref(null)
 
                 <template v-else>
                     <CardForm :card="card" ref="cardForm"/>
-                    <hr>
-                    <div v-if="card.comments?.length" class="mb-3">
-                        <h4>Comments</h4>
-                        <Comment v-for="comment in card.comments" :key="comment.id" :comment="comment" />
-                    </div>
 
-                    <br>
-                    <NewCommentForm />
+                    <Comments :card="card" />
 
-                    <div v-if="card.histories?.length" class="my-3">
-                        <hr>
-                        <label class="form-label fw-semibold text-muted">History</label>
-                        <History v-for="history in card.histories" :key="history.id" :history="history" />
-                    </div>
+                    <Histories :card="card" />
                 </template>
             </div>
         </div>

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
+    protected $fillable = ['user_id', 'card_id', 'text'];
+
     use SoftDeletes;
 
     public function user(): BelongsTo

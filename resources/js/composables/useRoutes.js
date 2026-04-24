@@ -30,6 +30,11 @@ export function useRoutes() {
                 update: (card) => route('boards.cards.update', [b(), id(card)]),
                 destroy: (card) => route('boards.cards.destroy', [b(), id(card)]),
                 move: (col, card) => route('boards.cards.move', [b(), id(col), id(card)]),
+                comments: {
+                    store: (card) => route('boards.cards.comments.store', [b(), id(card)]),
+                    update: (card, comment) => route('boards.cards.comments.update', [b(), id(card), id(comment)]),
+                    destroy: (card, comment) => route('boards.cards.comments.destroy', [b(), id(card), id(comment)]),
+                },
             },
 
             tags: {

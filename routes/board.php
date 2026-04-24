@@ -3,6 +3,7 @@
 use App\Http\Controllers\Async\BoardUserController;
 use App\Http\Controllers\Async\CardController;
 use App\Http\Controllers\Async\ColumnController;
+use App\Http\Controllers\Async\CommentController;
 use App\Http\Controllers\Async\TagController;
 use App\Http\Controllers\BoardController;
 use App\Http\Middleware\EnsureUserIsBoardMember;
@@ -55,5 +56,10 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{card}', 'destroy')->name('cards.destroy');
         });
 
+        Route::prefix('{board}/cards/{card}/comments')->controller(CommentController::class)->name('cards.comments.')->group(function () {
+            Route::post('/', 'store')->name('store');
+            Route::patch('/{comment}', 'update')->name('update');
+            Route::delete('/{comment}', 'destroy')->name('destroy');
+        });
     })->middleware(HasAccessToBoard::class);
 });
