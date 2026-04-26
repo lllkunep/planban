@@ -1,11 +1,16 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import {ref, onMounted, onUnmounted} from 'vue'
 import CardForm from "@/Pages/Card/Partial/CardForm.vue";
 import Button from "@/Components/Common/Button.vue";
 import Comments from "./Partial/Comments.vue";
 import Histories from "@/Pages/Card/Partial/Histories.vue";
+import {useRoutes} from "@/composables/useRoutes.js";
+import {useToast} from '@/composables/useToast'
 
-const emit = defineEmits(['close']);
+const toast = useToast()
+const routes = useRoutes();
+
+const emit = defineEmits(['close', 'deleted']);
 
 const card = defineModel('card', {
     type: Object,
@@ -18,8 +23,21 @@ const props = defineProps({
         default: false,
     },
 })
+
 function onKeydown(e) {
     if (e.key === 'Escape') emit('close')
+}
+
+async function deleteCard() {
+    if (confirm('Are you sure you want to delete this card?')) {
+        try {
+            await axios.delete(routes.boards.cards.destroy(card.value));
+            emit('deleted', card.value.id);
+        } catch (error) {
+            const message = error.response?.data.message ?? 'Something went wrong';
+            toast.error(message)
+        }
+    }
 }
 
 onMounted(() => window.addEventListener('keydown', onKeydown))
@@ -33,7 +51,10 @@ const cardForm = ref(null)
         <div v-if="card" class="sidebar-overlay" @click.self="emit('close')">
             <div class="sidebar-panel">
                 <div class="float-end d-inline">
-                    <Button variant="danger" class="me-2" @click="emit('close')">
+                    <Button variant="danger" class="me-2" @click="deleteCard">
+                        Delete
+                    </Button>
+                    <Button variant="secondary" class="me-2" @click="emit('close')">
                         Cancel
                     </Button>
                     <Button variant="success" @click="cardForm.save()">
@@ -41,15 +62,15 @@ const cardForm = ref(null)
                     </Button>
                 </div>
                 <div v-if="loading" class="text-center text-muted py-4">
-                    <div class="spinner-border spinner-border-sm" />
+                    <div class="spinner-border spinner-border-sm"/>
                 </div>
 
                 <template v-else>
                     <CardForm :card="card" ref="cardForm"/>
 
-                    <Comments :card="card" />
+                    <Comments :card="card"/>
 
-                    <Histories :card="card" />
+                    <Histories :card="card"/>
                 </template>
             </div>
         </div>

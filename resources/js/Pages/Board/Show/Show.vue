@@ -1,22 +1,21 @@
 <script setup>
 import {onMounted, ref} from 'vue'
-import { Head } from '@inertiajs/vue3'
+import {Head} from '@inertiajs/vue3'
 import axios from 'axios'
 import draggable from 'vuedraggable'
 import BoardLayout from '@/Layouts/BoardLayout.vue'
 import Column from '@/Pages/Board/Show/Includes/Column.vue'
 import CardShow from '@/Pages/Card/Show.vue'
 import {useRoutes} from "@/composables/useRoutes.js";
-import { useBoard } from "@/composables/useBoard.js";
-import { useToast }     from '@/composables/useToast'
+import {useBoard} from "@/composables/useBoard.js";
+import {useToast} from '@/composables/useToast'
 
-const toast  = useToast()
-
-const { currentBoard } = useBoard()
 const routes = useRoutes()
+const {currentBoard} = useBoard()
+const toast = useToast()
 
 const props = defineProps({
-    initialCard: { type: Object, default: null },
+    initialCard: {type: Object, default: null},
 })
 
 const selectedCard = ref(null)
@@ -26,7 +25,13 @@ const localColumns = ref([...currentBoard.value.columns])
 let columnsSnapshot = []
 
 onMounted(() => {
-    localColumns.value.push({id: null, name: '', cards: [], board_id: currentBoard.value.id, position: localColumns.value.length})
+    localColumns.value.push({
+        id: null,
+        name: '',
+        cards: [],
+        board_id: currentBoard.value.id,
+        position: localColumns.value.length
+    })
     if (props.initialCard) openCard(props.initialCard)
 })
 
@@ -34,8 +39,14 @@ function onStart() {
     columnsSnapshot = JSON.parse(JSON.stringify(localColumns.value))
 }
 
-function columnAdded(){
-    localColumns.value.push({id: null, name: '', cards: [], board_id: currentBoard.value.id, position: localColumns.value.length})
+function columnAdded() {
+    localColumns.value.push({
+        id: null,
+        name: '',
+        cards: [],
+        board_id: currentBoard.value.id,
+        position: localColumns.value.length
+    })
 }
 
 async function columnDeleted(columnId) {
@@ -47,7 +58,7 @@ async function handleColumnChange(event) {
     if (!item) return
     try {
         const newIndex = localColumns.value.length - 2 - item.newIndex
-        await axios.patch(routes.boards.columns.move(item.element), { position: newIndex, ololo: item.newIndex})
+        await axios.patch(routes.boards.columns.move(item.element), {position: newIndex, ololo: item.newIndex})
     } catch (error) {
         const message = error.response?.data.message ?? 'Something went wrong';
         toast.error(message)
@@ -69,7 +80,7 @@ async function openCard(card) {
         sidebarLoading.value = true
         const boardCard = findCardInBoard(card.id)
         selectedCard.value = boardCard ?? card
-        const { data } = await axios.get(routes.boards.cards.show(card))
+        const {data} = await axios.get(routes.boards.cards.show(card))
         Object.assign(selectedCard.value, data.data)
         sidebarLoading.value = false
     } catch (error) {
@@ -86,6 +97,17 @@ function closeCard() {
     history.replaceState(null, '', routes.boards.show(currentBoard.value))
 }
 
+function cardDeleted(cardId) {
+    closeCard()
+    const card = findCardInBoard(cardId)
+    if (card) {
+        const column = localColumns.value.find(c => c.cards.includes(card))
+        if (column) {
+            column.cards = column.cards.filter(c => c.id !== cardId)
+        }
+    }
+}
+
 async function moveCard(column, card, position) {
     try {
         await axios.patch(routes.boards.cards.move(column, card), {position: position})
@@ -98,7 +120,7 @@ async function moveCard(column, card, position) {
 </script>
 
 <template>
-    <Head :title="'PlanBan: ' + currentBoard.name" />
+    <Head :title="'PlanBan: ' + currentBoard.name"/>
     <BoardLayout>
         <draggable
             v-model="localColumns"
@@ -126,6 +148,7 @@ async function moveCard(column, card, position) {
             :card="selectedCard"
             :loading="sidebarLoading"
             @close="closeCard"
+            @deleted="cardDeleted"
         />
     </BoardLayout>
 </template>
