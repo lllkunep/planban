@@ -85,7 +85,7 @@ async function deleteColumn(columnId) {
 </script>
 
 <template>
-    <div class="flex-shrink-0" style="width: 400px">
+    <div class="flex-shrink-0 overflow-auto" style="width: 400px; height: calc(100vh - 110px)">
         <div class="d-flex justify-content-between align-items-center
                     bg-light rounded-top p-2 column-handle"
              style="cursor: grab">
