@@ -15,7 +15,7 @@ class CardRepository implements CardRepositoryInterface
             throw new ModelNotFoundException('Card not found in this board');
         }
 
-        $card->load(['assignedUsers', 'tags', 'comments.user', 'histories.user']);
+        $card->load(['assignedUser', 'tags', 'comments.user', 'histories.user']);
 
         return $card;
     }

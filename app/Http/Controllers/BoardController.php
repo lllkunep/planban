@@ -53,7 +53,7 @@ class BoardController extends Controller
         $this->authorize('view', $board);
 
         $board->load('columns.cards');
-        $card->load(['assignedUsers', 'tags', 'comments.user', 'histories.user']);
+        $card->load(['assignedUser', 'tags', 'comments.user', 'histories.user']);
 
         return Inertia::render('Board/Show/Show', [
             'board'       => $board,
