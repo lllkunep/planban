@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Events\AddNotification;
 use App\Events\CardUpdated;
 use App\Models\Board;
 use App\Models\Card;
@@ -95,10 +94,6 @@ class CardService
             if($actionMessages){
                 CardUpdated::dispatch($card, $authUser, $actionMessages);
             }
-
-//            if ($card->assignedUser_id && $card->assignedUser_id != $authUser->id) {
-//                AddNotification::dispatch($card, $card->assignedUser, $actionMessages);
-//            }
 
             $card->load('tags', 'assignedUser', 'histories.user');
 
