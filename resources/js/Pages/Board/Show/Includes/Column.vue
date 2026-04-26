@@ -7,10 +7,11 @@ import UnborderedInput from "@/Components/Form/UnborderedInput.vue";
 import IconButton from "@/Components/Common/IconButton.vue";
 import AddCardForm from "@/Pages/Board/Show/Includes/AddCardForm.vue";
 import {useRoutes} from "@/composables/useRoutes.js";
-const routes = useRoutes()
-import { useToast }     from '@/composables/useToast'
 
-const toast  = useToast()
+const routes = useRoutes()
+import {useToast} from '@/composables/useToast'
+
+const toast = useToast()
 
 const props = defineProps({
     column: {
@@ -21,7 +22,7 @@ const props = defineProps({
 
 const lastName = ref(props.column.name)
 
-const emit = defineEmits(['card-move-start', 'card-selected', 'card-moved', 'column-added', 'column-deleted' ])
+const emit = defineEmits(['card-move-start', 'card-selected', 'card-moved', 'column-added', 'column-deleted'])
 
 function handleChange(event) {
     const item = event.added ?? event.moved
@@ -36,7 +37,7 @@ async function submitAddCard(newCardName) {
     if (!name) return
 
     try {
-        const { data } = await axios.post(routes.boards.cards.store(props.column), {
+        const {data} = await axios.post(routes.boards.cards.store(props.column), {
             name: name,
         })
 
@@ -51,10 +52,10 @@ async function changeColumnName(event) {
     const newName = event.target.value
     if (!newName) return
 
-    try{
+    try {
         if (!props.column.id) {
             props.column.name = newName
-            const { data } = await axios.post(routes.boards.columns.store(), props.column)
+            const {data} = await axios.post(routes.boards.columns.store(), props.column)
             props.column.id = data.data.id
             emit('column-added')
         } else {
@@ -84,7 +85,7 @@ async function deleteColumn(columnId) {
 </script>
 
 <template>
-    <div class="flex-shrink-0" style="width: 280px">
+    <div class="flex-shrink-0" style="width: 400px">
         <div class="d-flex justify-content-between align-items-center
                     bg-light rounded-top p-2 column-handle"
              style="cursor: grab">
@@ -120,7 +121,7 @@ async function deleteColumn(columnId) {
             @start="emit('card-move-start')"
         >
             <template #item="{ element }">
-                <CardItem :card="element" @card-selected="emit('card-selected', $event)" />
+                <CardItem :card="element" @card-selected="emit('card-selected', $event)"/>
             </template>
         </draggable>
     </div>
@@ -132,6 +133,7 @@ async function deleteColumn(columnId) {
     background: #c8ebfb;
     border-radius: 4px;
 }
+
 .drag-active {
     cursor: grabbing !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;

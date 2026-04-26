@@ -41,7 +41,7 @@ class BoardController extends Controller
     {
         $this->authorize('view', $board);
 
-        $board->load('columns.cards');
+        $board->load('columns.cards.tags');
 
         return Inertia::render('Board/Show/Show', [
             'board' => $board,
