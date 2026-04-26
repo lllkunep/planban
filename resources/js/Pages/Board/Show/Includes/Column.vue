@@ -102,7 +102,7 @@ async function deleteColumn(columnId) {
                 :title="props.column.cards.length > 0 ? 'Cannot delete non-empty column' : ''"
                 v-if="column.id"
                 @click="props.column.cards.length === 0 && deleteColumn(column.id)"
-                :style="props.column.cards.length > 0 ? 'pointer-events: none; cursor: not-allowed;' : ''"
+                :style="props.column.cards.length > 0 ? 'pointer-events: auto;cursor: not-allowed;' : ''"
             />
         </div>
 
