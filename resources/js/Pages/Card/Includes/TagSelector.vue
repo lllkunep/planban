@@ -1,6 +1,7 @@
 <script setup>
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
+import Tag from "@/Components/Common/Tag.vue";
 
 const props = defineProps({
     options: {
@@ -24,23 +25,10 @@ const model = defineModel({
         :multiple="true"
     >
         <template #tag="{ option, remove }">
-            <span
-                class="badge me-1"
-                :style="{ backgroundColor: option.color }"
-            >
-                {{ option.name }}
-                <span @click="remove(option)" style="cursor: pointer;">✕</span>
-            </span>
+            <Tag :text="option.name" :color="option.color" /><span @click="remove(option)" style="cursor: pointer;">✕</span>
         </template>
         <template #option="{ option }">
-            <div class="d-flex align-items-center gap-2">
-            <span
-                class="rounded-circle"
-                style="width: 12px; height: 12px; flex-shrink: 0;"
-                :style="{ backgroundColor: option.color }"
-            ></span>
-                <span>{{ option.name }}</span>
-            </div>
+            <Tag :text="option.name" :color="option.color" />
         </template>
     </Multiselect>
 </template>

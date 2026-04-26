@@ -3,7 +3,7 @@
 import Textarea from "@/Components/Form/Textarea.vue";
 import FormField from "@/Components/Form/FormField.vue";
 import FormSelect from "@/Components/Form/FormSelect.vue";
-import Multiselect from "@/Components/Form/Multiselect.vue";
+import TagSelector from "@/Pages/Card/Includes/TagSelector.vue";
 import { useAxiosForm } from "@/composables/useAxiosForm.js";
 import { useBoard } from "@/composables/useBoard.js";
 import { useRoutes } from "@/composables/useRoutes.js";
@@ -59,7 +59,7 @@ defineExpose({ save })
                 <label class="col-form-label" for="tags">Tags</label>
             </div>
             <div class="col-10">
-                <Multiselect
+                <TagSelector
                     id="tags"
                     :options="currentBoard.tags"
                     v-model="cardForm.tags"

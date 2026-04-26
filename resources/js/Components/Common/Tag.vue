@@ -52,7 +52,7 @@ function onChange($event) {
     <span v-else
           :class="defaultClasses"
           :style="{ width: (text.length + 3) + 'ch', color: getTextColor(color), backgroundColor: color}"
-          style="cursor: text; border-radius: 10px;"
+          style="cursor: text; border-radius: 10px;display: inline-block;"
     >
         {{ text }}
     </span>
