@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\CardUpdated;
+use App\Models\History;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
