@@ -40,7 +40,7 @@ async function submitAddCard(newCardName) {
             name: name,
         })
 
-        props.column.cards.push(data.data)
+        props.column.cards.unshift(data.data)
     } catch (error) {
         const message = error.response?.data.message ?? 'Something went wrong';
         toast.error(message)
