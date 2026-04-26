@@ -85,6 +85,8 @@ class CardService
                 }
             }
 
+            $card->load('tags', 'assignedUser', 'histories.user');
+
             return $card;
         });
     }
