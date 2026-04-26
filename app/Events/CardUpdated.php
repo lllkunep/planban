@@ -22,7 +22,7 @@ class CardUpdated
     public function __construct(
         public Card $card,
         public User $user,
-        public string $text,
+        public string|array $texts,
     )
     {}
 

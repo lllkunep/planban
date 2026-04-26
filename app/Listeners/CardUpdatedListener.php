@@ -22,10 +22,16 @@ class CardUpdatedListener
      */
     public function handle(CardUpdated $event): void
     {
-        History::create([
-            'card_id' => $event->card->id,
-            'user_id' => $event->user->id,
-            'text' => $event->text
-        ]);
+        $texts = $event->texts;
+        if (!is_array($texts)){
+            $texts = [$texts];
+        }
+        foreach ($texts as $text){
+            History::create([
+                'card_id' => $event->card->id,
+                'user_id' => $event->user->id,
+                'text' => $text
+            ]);
+        }
     }
 }

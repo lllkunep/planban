@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Events\AddNotification;
 use App\Events\CardUpdated;
 use App\Models\Board;
 use App\Models\Card;
 use App\Models\Column;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
@@ -33,6 +35,9 @@ class CardService
         }
 
         return DB::transaction(function () use ($card, $data) {
+            $authUser = auth()->user();
+            $actionMessages = [];
+
             $oldData = $card->toArray();
             $card->update(
                 collect($data)->only(['name', 'text', 'assigned_user_id'])->toArray()
@@ -51,17 +56,21 @@ class CardService
             $newTagsIds = collect($data['tags'])->pluck('id')->toArray() ?? [];
 
             if ($card->wasChanged('name')) {
-                CardUpdated::dispatch($card, auth()->user(), "Changed name from {$oldData['name']} to {$card->name}");
+                $actionMessages[] = "Changed name from {$oldData['name']} to {$card->name}";
             }
             if ($card->wasChanged('text')) {
-                CardUpdated::dispatch($card, auth()->user(), "Changed text");
+                $actionMessages[] = "Changed text";
             }
             if ($card->wasChanged('assigned_user_id')) {
                 $card->load('assignedUser');
                 if ($oldData['assigned_user_id'] !== $card->assigned_user_id) {
-                    CardUpdated::dispatch($card, auth()->user(), "Assigned to {$card->assignedUser->name}");
+                    $actionMessages[] = "Assigned to {$card->assignedUser->name}";
+                    $oldUser = User::find($oldData['assigned_user_id']);
+                    if ($oldUser){
+                        AddNotification::dispatch($card, User::find($oldData['assigned_user_id']), "Unassigned from {$card->title}","You have been unassigned from the card {$card->title}");
+                    }
                 } elseif (!$card->assigned_user_id) {
-                    CardUpdated::dispatch($card, auth()->user(), "Unassigned");
+                    $actionMessages[] = "Unassigned";
                 }
             }
             $added   = array_diff($newTagsIds, $oldTagsIds);
@@ -74,16 +83,22 @@ class CardService
                 if($removed->count() > 0){
                     $names = $removed->pluck('name')->toArray();
                     $names = implode(', ', $names);
-
-                    CardUpdated::dispatch($card, auth()->user(), "Removed tags: {$names}");
+                    $actionMessages[] = "Removed tags: {$names}";
                 }
                 if($added->count() > 0){
                     $names = $added->pluck('name')->toArray();
                     $names = implode(', ', $names);
-
-                    CardUpdated::dispatch($card, auth()->user(), "Added tags: {$names}");
+                    $actionMessages[] = "Added tags: {$names}";
                 }
             }
+
+            if($actionMessages){
+                CardUpdated::dispatch($card, $authUser, $actionMessages);
+            }
+
+//            if ($card->assignedUser_id && $card->assignedUser_id != $authUser->id) {
+//                AddNotification::dispatch($card, $card->assignedUser, $actionMessages);
+//            }
 
             $card->load('tags', 'assignedUser', 'histories.user');
 
