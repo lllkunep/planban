@@ -53,7 +53,7 @@ class CardService
 
             $card->load('tags');
             $newTags = $card->tags;
-            $newTagsIds = collect($data['tags'])->pluck('id')->toArray() ?? [];
+            $newTagsIds = $data['tags'] ? collect($data['tags'])->pluck('id')->toArray() : [];
 
             if ($card->wasChanged('name')) {
                 $actionMessages[] = "Changed name from {$oldData['name']} to {$card->name}";
@@ -63,7 +63,7 @@ class CardService
             }
             if ($card->wasChanged('assigned_user_id')) {
                 if ($assignedUser && $assignedUser->id != $card->assigned_user_id){
-                    // TODO: notify assigned user
+                    $assignedUser->notify(new \App\Notifications\CardUpdatedNotification($card, 'You was designated from card', $authUser));
                 }
 
                 if($oldData['assigned_user_id'] != $card->assigned_user_id){

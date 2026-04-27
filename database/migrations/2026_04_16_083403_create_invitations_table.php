@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('invitations', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
+            $table->string('email');
             $table->foreignId('board_id')->constrained()->cascadeOnDelete();
+            $table->unique(['email', 'board_id']);
             $table->timestamps();
         });
     }

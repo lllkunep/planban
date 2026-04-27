@@ -31,7 +31,6 @@ Route::middleware('auth')->group(function () {
         Route::prefix('{board}/users')->controller(BoardUserController::class)->middleware(EnsureUserIsBoardMember::class)->group(function () {
             Route::post('/', 'attach')->name('attach');
             Route::delete('/{user}', 'detach')->name('detach');
-            Route::delete('/{user}', 'detach')->name('detach');
             Route::patch('/{user}/change-role', 'changeRole')->name('changeRole');
             Route::patch('/{user}/set-new-owner', 'setNewOwner')->name('setNewOwner');
             Route::delete('/invitations/{invitation}', 'removeInvitation')->name('removeInvitation');

@@ -21,4 +21,9 @@ class Comment extends Model
     {
         return $this->belongsTo(Card::class);
     }
+
+    public function belongsToCard(Card $card): bool
+    {
+        return $this->card_id === $card->id;
+    }
 }

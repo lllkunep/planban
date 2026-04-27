@@ -58,6 +58,8 @@ class BoardUserController extends AsyncController
             ]);
         }
 
+        $board->members()->detach($user->id);
+
         return response()->json([
             'success' => true,
             'message' => 'Member removed successfully',
