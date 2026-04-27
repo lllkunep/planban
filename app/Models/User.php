@@ -55,11 +55,6 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(Notification::class);
-    }
-
     public static function getByEmail(string $email): ?User
     {
         return self::where('email', $email)->first();

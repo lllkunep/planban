@@ -14,7 +14,7 @@ class CardService
 {
     public function store(Board $board, Column $column, array $data): Card
     {
-        if (!$column->belongsToBoard($board)){
+        if (!$column->belongsToBoard($board)) {
             throw new ModelNotFoundException('Column not found in this board');
         }
 
@@ -29,12 +29,13 @@ class CardService
 
     public function update(Board $board, Card $card, array $data): Card
     {
-        if (!$card->belongsToBoard($board)){
+        if (!$card->belongsToBoard($board)) {
             throw new ModelNotFoundException('Column or card not found in this board');
         }
 
         return DB::transaction(function () use ($card, $data) {
             $authUser = auth()->user();
+            $assignedUser = $card->assignedUser;
             $actionMessages = [];
 
             $oldData = $card->toArray();
@@ -42,7 +43,7 @@ class CardService
                 collect($data)->only(['name', 'text', 'assigned_user_id'])->toArray()
             );
 
-            $oldTags    = $card->tags;
+            $oldTags = $card->tags;
             $oldTagsIds = $card->tags->pluck('id')->toArray();
 
             if (isset($data['tags'])) {
@@ -61,38 +62,46 @@ class CardService
                 $actionMessages[] = "Changed text";
             }
             if ($card->wasChanged('assigned_user_id')) {
-                $card->load('assignedUser');
-                if ($oldData['assigned_user_id'] !== $card->assigned_user_id) {
-                    $actionMessages[] = "Assigned to {$card->assignedUser->name}";
-                    $oldUser = User::find($oldData['assigned_user_id']);
-                    if ($oldUser){
-                        AddNotification::dispatch($card, User::find($oldData['assigned_user_id']), "Unassigned from {$card->title}","You have been unassigned from the card {$card->title}");
+                if ($assignedUser && $assignedUser->id != $card->assigned_user_id){
+                    // TODO: notify assigned user
+                }
+
+                if($oldData['assigned_user_id'] != $card->assigned_user_id){
+                    if($card->assigned_user_id){
+                        $card->load('assignedUser');
+                        $assignedUser = $card->assignedUser;
+                        $actionMessages[] = "Assigned to {$assignedUser->name}";
+                    }else{
+                        $actionMessages[] = "Unassigned from {$assignedUser->name}";
+                        $assignedUser = null;
                     }
-                } elseif (!$card->assigned_user_id) {
-                    $actionMessages[] = "Unassigned";
                 }
             }
-            $added   = array_diff($newTagsIds, $oldTagsIds);
+            $added = array_diff($newTagsIds, $oldTagsIds);
             $removed = array_diff($oldTagsIds, $newTagsIds);
 
             if (!empty($added) || !empty($removed)) {
-                $added   = $newTags->whereNotIn('id', $oldTagsIds);
+                $added = $newTags->whereNotIn('id', $oldTagsIds);
                 $removed = $oldTags->whereNotIn('id', $newTagsIds);
 
-                if($removed->count() > 0){
+                if ($removed->count() > 0) {
                     $names = $removed->pluck('name')->toArray();
                     $names = implode(', ', $names);
                     $actionMessages[] = "Removed tags: {$names}";
                 }
-                if($added->count() > 0){
+                if ($added->count() > 0) {
                     $names = $added->pluck('name')->toArray();
                     $names = implode(', ', $names);
                     $actionMessages[] = "Added tags: {$names}";
                 }
             }
 
-            if($actionMessages){
+            if ($actionMessages) {
                 CardUpdated::dispatch($card, $authUser, $actionMessages);
+            }
+
+            if ($assignedUser && $assignedUser->id != $authUser->id) {
+                $assignedUser->notify(new \App\Notifications\CardUpdatedNotification($card, $actionMessages, $authUser));
             }
 
             $card->load('tags', 'assignedUser', 'histories.user');
@@ -103,7 +112,7 @@ class CardService
 
     public function move(Board $board, Column $column, Card $card, int $position): Card
     {
-        if (!$column->belongsToBoard($board) || !$card->belongsToBoard($board)){
+        if (!$column->belongsToBoard($board) || !$card->belongsToBoard($board)) {
             throw new ModelNotFoundException('Column or card not found in this board');
         }
 
@@ -118,7 +127,7 @@ class CardService
 
             $j = 0;
             for ($i = 0; $i < $columnCards->count(); $i++) {
-                if ($i == $position){
+                if ($i == $position) {
                     $j = 1;
                 }
                 $columnCards[$i]->position = $i + $j;
@@ -136,7 +145,7 @@ class CardService
 
     public function delete(Board $board, Card $card): void
     {
-        if (!$card->belongsToBoard($board)){
+        if (!$card->belongsToBoard($board)) {
             throw new ModelNotFoundException('Column or card not found in this board');
         }
 

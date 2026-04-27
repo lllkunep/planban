@@ -56,6 +56,10 @@ class HandleInertiaRequests extends Middleware
                 return $board;
             },
 
+            'hasNotification' => function () use ($request) {
+                return $request->user()->unreadNotifications->isNotEmpty();
+            },
+
             'flash' => [
                 'success' => session('success'),
                 'error'   => session('error'),

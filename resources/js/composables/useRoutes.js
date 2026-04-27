@@ -80,5 +80,9 @@ export function useRoutes() {
             send:   () => route('verification.send'),
             verify: () => route('verification.verify'),
         },
+
+        notifications: {
+            index: () => route('notifications.index'),
+        }
     }
 }

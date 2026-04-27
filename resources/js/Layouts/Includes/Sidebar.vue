@@ -4,6 +4,9 @@ import BoardListItem from "@/Layouts/Includes/BoardListItem.vue";
 import Button from "@/Components/Common/Button.vue";
 import { useRoutes } from "@/composables/useRoutes.js";
 import { useBoard} from "@/composables/useBoard.js";
+import { usePage } from "@inertiajs/vue3";
+
+const page = usePage();
 
 const routes = useRoutes()
 
@@ -17,8 +20,8 @@ const { currentBoard, boards } = useBoard();
             <Button variant="light" class="w-100 list-group-item list-group-item-action border-0" :href="routes.dashboard()">
                 <i class="bi bi-card-list"></i> Dashboard
             </Button>
-            <Button variant="light" class="w-100 list-group-item list-group-item-action border-0">
-                <i class="bi bi-bell"></i> Notifications
+            <Button variant="light" class="w-100 list-group-item list-group-item-action border-0" :href="routes.notifications.index()">
+                <i v-if="page.props.hasNotification" class="bi bi-bell-fill text-warning"></i><i v-else class="bi bi-bell"></i>  Notifications
             </Button>
             <Button variant="light" class="w-100 list-group-item list-group-item-action border-0" :href="routes.boards.edit()">
                 <i class="bi bi-gear"></i> Board settings
