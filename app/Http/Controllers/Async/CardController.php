@@ -43,7 +43,7 @@ class CardController extends AsyncController
     {
         $card = $this->cardService->update($board, $card, $request->validate([
             'name'             => 'required|string|max:255',
-            'text'             => 'sometimes|string|nullable',
+            'text'             => 'sometimes|string|nullable|max:2000',
             'assigned_user_id' => 'sometimes|nullable|exists:users,id',
             'tags'             => 'sometimes|array',
             'tags.*.id'        => 'exists:tags,id',
