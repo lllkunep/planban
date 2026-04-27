@@ -3,9 +3,12 @@ import OneLineTextForm from "@/Components/Form/OneLineTextForm.vue";
 import axios from "axios";
 import {ref} from "vue";
 import IconButton from "@/Components/Common/IconButton.vue";
-import { useRoutes } from "@/composables/useRoutes.js";
-import { useAxiosForm } from "@/composables/useAxiosForm.js";
+import {useRoutes} from "@/composables/useRoutes.js";
+import {useAxiosForm} from "@/composables/useAxiosForm.js";
 import ListItemWithActions from "@/Components/Form/ListItemWithActions.vue";
+import {useCan} from "@/composables/useCan.js";
+
+const can = useCan()
 
 const routes = useRoutes()
 
@@ -43,7 +46,7 @@ function addMember() {
 
 async function changeMemberRole(member, event) {
     try {
-        const { data } = await axios.patch(routes.boards.users.changeRole(member), {
+        const {data} = await axios.patch(routes.boards.users.changeRole(member), {
             role: event.target.value,
         });
 
@@ -82,16 +85,18 @@ async function removeInvitation(invitation) {
 <template>
     <h3>Manage members</h3>
 
-    <h4>Add member</h4>
-    <OneLineTextForm
-        :form="newMemberForm"
-        field="email"
-        label="Email"
-        buttonText="Add"
-        @submit="addMember"
-    />
+    <div v-if="can.admin">
+        <h4>Add member</h4>
+        <OneLineTextForm
+            :form="newMemberForm"
+            field="email"
+            label="Email"
+            buttonText="Add"
+            @submit="addMember"
+        />
 
-    <hr>
+        <hr>
+    </div>
 
     <h4 class="mt-4">Members</h4>
 
@@ -104,12 +109,15 @@ async function removeInvitation(invitation) {
         >
             {{ member.name }} | {{ member.email }}
             <template #actions>
-                <select class="form-select" aria-label="Role" :disabled="member.pivot.role === 'owner'" @change="changeMemberRole(member, $event)">
-                    <option :selected="member.pivot.role === role.value" v-for="role in roles" :key="role.value" :value="role.value" :disabled="role.value === 'owner'">
+                <select class="form-select" aria-label="Role" :disabled="member.pivot.role === 'owner' || !can.admin"
+                        @change="changeMemberRole(member, $event)">
+                    <option :selected="member.pivot.role === role.value" v-for="role in roles" :key="role.value"
+                            :value="role.value" :disabled="role.value === 'owner'">
                         {{ role.label }}
                     </option>
                 </select>
-                <IconButton icon="trash" variant="danger" :disabled="member.pivot.role === 'owner'" @click="removeMember(member)" />
+                <IconButton icon="trash" variant="danger" :disabled="member.pivot.role === 'owner' || !can.admin"
+                            @click="removeMember(member)"/>
             </template>
         </ListItemWithActions>
     </ul>
@@ -125,7 +133,7 @@ async function removeInvitation(invitation) {
         <ListItemWithActions v-for="invitation in board.invitations">
             {{ invitation.email }}
             <template #actions>
-                <IconButton icon="trash" variant="danger" @click="removeInvitation(invitation)"/>
+                <IconButton icon="trash" variant="danger" @click="removeInvitation(invitation)" :disabled="!can.admin"/>
             </template>
         </ListItemWithActions>
     </ul>

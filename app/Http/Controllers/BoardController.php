@@ -15,6 +15,7 @@ class BoardController extends Controller
     {
         return Inertia::render('Board/Create');
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -39,8 +40,6 @@ class BoardController extends Controller
      */
     public function show(Board $board): Response
     {
-        $this->authorize('view', $board);
-
         $board->load('columns.cards.tags');
 
         return Inertia::render('Board/Show/Show', [
@@ -50,21 +49,17 @@ class BoardController extends Controller
 
     public function onCard(Board $board, Card $card): Response
     {
-        $this->authorize('view', $board);
-
         $board->load('columns.cards');
         $card->load(['assignedUser', 'tags', 'comments.user', 'histories.user']);
 
         return Inertia::render('Board/Show/Show', [
-            'board'       => $board,
+            'board' => $board,
             'initialCard' => $card,
         ]);
     }
 
     public function edit(Board $board): Response
     {
-        $this->authorize('update', $board);
-
         $roles = collect(BoardRole::cases())->map(fn($r) => [
             'value' => $r->value,
             'label' => $r->label(),
@@ -83,8 +78,7 @@ class BoardController extends Controller
      */
     public function update(Request $request, Board $board)
     {
-        $this->authorize('update', $board);
-
+        $this->authorize('owner', $board);
         $board->update($request->validate([
             'name' => ['required', 'string', 'max:255'],
         ]));
@@ -97,8 +91,7 @@ class BoardController extends Controller
      */
     public function destroy(Board $board)
     {
-        $this->authorize('delete', $board);
-
+        $this->authorize('owner', $board);
         $board->delete();
 
         return redirect()->route('dashboard');

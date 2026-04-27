@@ -7,14 +7,13 @@ use App\Http\Controllers\Async\CommentController;
 use App\Http\Controllers\Async\TagController;
 use App\Http\Controllers\BoardController;
 use App\Http\Middleware\EnsureUserIsBoardMember;
-use App\Http\Middleware\HasAccessToBoard;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
-    Route::prefix('boards')->name('boards.')->group(function () {
+    Route::prefix('boards')->name('boards.')->middleware('can:member,board')->group(function () {
         Route::controller(BoardController::class)->group(function () {
-            Route::get('/create', 'create')->name('create');
-            Route::post('/', 'store')->name('store');
+            Route::get('/create', 'create')->name('create')->withoutMiddleware('can:member,board');
+            Route::post('/', 'store')->name('store')->withoutMiddleware('can:member,board');
             Route::get('/{board}', 'show')->name('show');
             Route::get('/{board}/on/{card}', 'onCard')->name('onCard');
             Route::get('/{board}/edit', 'edit')->name('edit');
@@ -28,14 +27,14 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{tag}', 'destroy')->name('tags.destroy');
         });
 
-        Route::prefix('{board}/users')->controller(BoardUserController::class)->group(function () {
+        Route::prefix('{board}/users')->controller(BoardUserController::class)->middleware(EnsureUserIsBoardMember::class)->group(function () {
             Route::post('/', 'attach')->name('attach');
             Route::delete('/{user}', 'detach')->name('detach');
             Route::delete('/{user}', 'detach')->name('detach');
             Route::patch('/{user}/change-role', 'changeRole')->name('changeRole');
             Route::patch('/{user}/set-new-owner', 'setNewOwner')->name('setNewOwner');
             Route::delete('/invitations/{invitation}', 'removeInvitation')->name('removeInvitation');
-        })->middleware(EnsureUserIsBoardMember::class);
+        });
 
         Route::prefix('{board}/columns')->controller(ColumnController::class)->group(function () {
             Route::post('/', 'store')->name('columns.store');
@@ -61,5 +60,5 @@ Route::middleware('auth')->group(function () {
             Route::patch('/{comment}', 'update')->name('update');
             Route::delete('/{comment}', 'destroy')->name('destroy');
         });
-    })->middleware(HasAccessToBoard::class);
+    });
 });

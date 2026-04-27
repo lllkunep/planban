@@ -1,9 +1,9 @@
 <script setup>
 
-import { useId } from "vue";
+import {useId} from "vue";
 
 const props = defineProps({
-    label : {
+    label: {
         type: String,
         default: '',
     },
@@ -19,6 +19,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    disabled: {
+        type: Boolean,
+        default: false,
+    }
 })
 
 const form = defineModel('form', {
@@ -44,10 +48,12 @@ const id = useId();
                     :id="id"
                     class="form-control"
                     :class="{ 'is-invalid': form.errors[field] }"
+                    :disabled="disabled"
                 >
             </div>
             <div class="col-auto">
                 <button
+                    v-if="!disabled"
                     type="submit"
                     class="btn btn-primary text-nowrap"
                     :disabled="form.processing"

@@ -49,11 +49,31 @@ class HandleInertiaRequests extends Middleware
 
                 if (!$board instanceof Board) return null;
 
-                if (!$request->user()->can('view', $board)) return null;
-
-                $board->loadMissing(['members','tags']);
+                $board->loadMissing(['members', 'tags']);
 
                 return $board;
+            },
+
+            'can' => function () use ($request) {
+                if (!$request->user()) return [
+                    'member' => false,
+                    'admin' => false,
+                    'owner' => false,
+                ];
+
+                $board = $request->route('board');
+
+                if (!$board instanceof Board) return [
+                    'member' => false,
+                    'admin' => false,
+                    'owner' => false,
+                ];
+
+                return [
+                    'member' => auth()->user()->can('member', $board),
+                    'admin' => auth()->user()->can('admin', $board),
+                    'owner' => auth()->user()->can('owner', $board),
+                ];
             },
 
             'hasNotification' => function () use ($request) {
@@ -64,7 +84,7 @@ class HandleInertiaRequests extends Middleware
 
             'flash' => [
                 'success' => session('success'),
-                'error'   => session('error'),
+                'error' => session('error'),
             ],
         ];
     }

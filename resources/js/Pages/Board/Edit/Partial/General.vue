@@ -1,16 +1,12 @@
 <script setup>
 
 import TagList from "@/Pages/Board/Edit/Partial/Includes/TagList.vue";
-import {useForm, usePage} from "@inertiajs/vue3";
+import {useForm} from "@inertiajs/vue3";
 import OneLineTextForm from "@/Components/Form/OneLineTextForm.vue";
-import {computed} from "vue";
-import { useRoutes } from "@/composables/useRoutes.js";
+import {useRoutes} from "@/composables/useRoutes.js";
+import {useCan} from "@/composables/useCan.js";
 
 const routes = useRoutes();
-
-const page = usePage();
-
-const success = computed(() => page.props.flash.success)
 
 const board = defineModel('board', {
     type: Object,
@@ -21,9 +17,11 @@ const boardSettingsForm = useForm({
     name: board.value.name,
 });
 
+const can = useCan(board.value)
+
 function save() {
     boardSettingsForm.patch(routes.boards.update(), {
-        preserveState:  true,
+        preserveState: true,
         preserveScroll: true,
         onSuccess: () => {
             board.value.name = boardSettingsForm.name
@@ -43,6 +41,7 @@ function save() {
         label="Board title"
         buttonText="Save"
         @submit="save"
+        :disabled="!can.owner"
     />
     <hr>
     <h3 class="mt-3">Tags</h3>

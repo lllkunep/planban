@@ -18,8 +18,7 @@ class BoardUserController extends AsyncController
 
     public function attach(Request $request, Board $board)
     {
-        $this->authorize('update', $board);
-
+        $this->authorize('admin', $board);
         $validated = $request->validate([
             'email' => ['required', 'email'],
         ]);
@@ -52,8 +51,7 @@ class BoardUserController extends AsyncController
 
     public function detach(Board $board, User $user)
     {
-        $this->authorize('update', $board);
-
+        $this->authorize('admin', $board);
         if (!$this->isMember($user, $board)) {
             throw ValidationException::withMessages([
                 'user_id' => 'Member not found in this board',
@@ -69,8 +67,7 @@ class BoardUserController extends AsyncController
 
     public function changeRole(Request $request, Board $board, User $user)
     {
-        $this->authorize('update', $board);
-
+        $this->authorize('admin', $board);
         $validated = $request->validate([
             'role' => ['required', new Enum(BoardRole::class)],
         ]);
@@ -82,11 +79,13 @@ class BoardUserController extends AsyncController
         return response()->json([
             'success' => true,
             'message' => 'Role changed successfully',
-            'data' => $board->members()->wherePivot('user_id', $validated['user_id'])->first(),
+            'data' => $board->members()->wherePivot('user_id', $user->id)->first(),
         ]);
     }
 
-    public function setNewOwner(Board $board, User $user){
+    public function setNewOwner(Board $board, User $user)
+    {
+        $this->authorize('owner', $board);
         $board->setNewOwner($user);
 
         return response()->json([
@@ -96,7 +95,9 @@ class BoardUserController extends AsyncController
         ]);
     }
 
-    public function removeInvitation(Board $board, Invitation $invitation){
+    public function removeInvitation(Board $board, Invitation $invitation)
+    {
+        $this->authorize('admin', $board);
         if (!$invitation->belongsToBoard($board)) {
             throw new ModelNotFoundException('Invitation not found in this board');
         }

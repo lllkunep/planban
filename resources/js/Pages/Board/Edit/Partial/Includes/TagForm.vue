@@ -1,14 +1,21 @@
 <script setup>
 import Tag from "@/Components/Common/Tag.vue";
 import IconButton from "@/Components/Common/IconButton.vue";
-import { useRoutes } from "@/composables/useRoutes.js";
-import { useAxiosForm } from "@/composables/useAxiosForm.js";
+import {useRoutes} from "@/composables/useRoutes.js";
+import {useAxiosForm} from "@/composables/useAxiosForm.js";
 
 const routes = useRoutes()
 
 const tag = defineModel('tag', {
     type: Object,
     required: true,
+})
+
+const props = defineProps({
+    disabled: {
+        type: Boolean,
+        default: false,
+    }
 })
 
 const emits = defineEmits(['tag-added', 'tag-deleted']);
@@ -19,19 +26,19 @@ const form = useAxiosForm({
     board_id: tag.value.board_id,
 })
 
-function add(){
+function add() {
     if (tag.value.id) return
 
     form.post(routes.boards.tags.store(), {
         onSuccess: (response) => {
             const data = response.data;
-            tag.value = { id: data.id, name: data.name, color: data.color, board_id: data.board_id };
+            tag.value = {id: data.id, name: data.name, color: data.color, board_id: data.board_id};
             emits('tag-added');
         }
     });
 }
 
-function update(){
+function update() {
     if (!tag.value.id) return
 
     form.patch(routes.boards.tags.update(tag.value));
@@ -51,16 +58,19 @@ function destroy() {
 
 <template>
     <form class="d-flex gap-3 align-items-center" @submit.prevent="add">
-        <input type="color" class="form-control form-control-color" v-model="form.color" @change="update">
+        <input type="color" class="form-control form-control-color" v-model="form.color" @change="update"
+               :disabled="disabled">
         <Tag
             :color="form.color"
             v-model:text="form.name"
             :placeholder="tag.id ? 'Tag name...' : 'New tag...'"
             @change="update"
+            :disabled="disabled"
             as-input
         />
-        <IconButton v-if="tag.id" class="ms-auto" icon="trash" variant="danger" type="button" @click="destroy" />
-        <IconButton v-else class="ms-auto" icon="plus" variant="primary" />
+        <IconButton v-if="tag.id" class="ms-auto" icon="trash" variant="danger" type="button" @click="destroy"
+                    :disabled="disabled"/>
+        <IconButton v-else class="ms-auto" icon="plus" variant="primary" :disabled="disabled"/>
     </form>
     <div class="text-danger" v-if="form.errorMessage"> {{ form.errorMessage }}</div>
     <div class="text-success" v-if="form.successMessage"> {{ form.successMessage }}</div>

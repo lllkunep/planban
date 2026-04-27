@@ -15,6 +15,7 @@ class TagController extends AsyncController
      */
     public function store(Request $request, Board $board)
     {
+        $this->authorize('admin', $board);
         $validated = $request->validate([
             'name' => 'required|string|max:20',
             'color' => 'required|string|max:7',
@@ -34,6 +35,7 @@ class TagController extends AsyncController
      */
     public function update(Request $request, Board $board, Tag $tag)
     {
+        $this->authorize('admin', $board);
         if (!$tag->belongsToBoard($board)) {
             throw new ModelNotFoundException('Tag not found in this board');
         }
@@ -60,6 +62,7 @@ class TagController extends AsyncController
      */
     public function destroy(Board $board, Tag $tag)
     {
+        $this->authorize('admin', $board);
         if (!$tag->belongsToBoard($board)) {
             throw new ModelNotFoundException('Tag not found in this board');
         }
