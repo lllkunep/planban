@@ -53,7 +53,7 @@ class BoardController extends Controller
     public function onCard(Board $board, Card $card): Response
     {
         $board->load('columns.cards');
-        $card->load(['assignedUser', 'tags', 'comments.user', 'histories.user']);
+        $card->load(['assignedUser', 'tags', 'comments.user', 'comments.card.column.board', 'histories.user']);
 
         return Inertia::render('Board/Show/Show', [
             'board' => $board,

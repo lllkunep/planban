@@ -22,7 +22,7 @@ const comment = defineModel('comment', {
     }),
 })
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['added'])
 
 const commentForm = useAxiosForm({
     text: comment.value.text,
@@ -39,9 +39,8 @@ function submit() {
     } else {
         commentForm.post(routes.boards.cards.comments.store(props.card), {
             onSuccess: (data) => {
-                comment.value = data.data;
                 commentForm.reset();
-                emit('close');
+                emit('added', data.data);
             }
         })
     }
@@ -62,7 +61,7 @@ function submit() {
             <div class="text-danger" v-else-if="commentForm.errorMessage">{{ commentForm.errorMessage }}</div>
             <div class="text-success" v-if="commentForm.successMessage">{{ commentForm.successMessage }}</div>
         </div>
-        <Button variant="primary">Add comment</Button>
+        <Button v-if="comment.id" variant="primary">Save</Button><Button v-else variant="primary">Add</Button>
         <Button v-if="comment.id" variant="light" class="ms-2" @click="emit('close')">Cancel</Button>
     </form>
 </template>

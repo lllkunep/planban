@@ -37,6 +37,7 @@ class CommentController extends AsyncController
      */
     public function update(Request $request, Board $board, Card $card, Comment $comment): JsonResponse
     {
+        $this->authorize('update', $comment);
         if(!$comment->belongsToCard($card)) {
             throw new ModelNotFoundException('Card not found in this board');
         }
@@ -58,6 +59,7 @@ class CommentController extends AsyncController
      */
     public function destroy(Board $board, Card $card, Comment $comment): JsonResponse
     {
+        $this->authorize('delete', $comment);
         if(!$comment->belongsToCard($card)) {
             throw new ModelNotFoundException('Card not found in this board');
         }

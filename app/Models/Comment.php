@@ -9,8 +9,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Comment extends Model
 {
     protected $fillable = ['user_id', 'card_id', 'text'];
+    protected $appends = ['canUpdate', 'canDelete'];
 
     use SoftDeletes;
+
+    public function getCanUpdateAttribute(): bool
+    {
+        return auth()->check() && auth()->user()->can('update', $this);
+    }
+
+    public function getCanDeleteAttribute(): bool
+    {
+        return auth()->check() && auth()->user()->can('delete', $this);
+    }
 
     public function user(): BelongsTo
     {
