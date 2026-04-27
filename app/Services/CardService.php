@@ -9,9 +9,12 @@ use App\Models\Column;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use App\Traits\ChecksBoardMembership;
 
 class CardService
 {
+    use ChecksBoardMembership;
+
     public function store(Board $board, Column $column, array $data): Card
     {
         if (!$column->belongsToBoard($board)) {
@@ -31,6 +34,13 @@ class CardService
     {
         if (!$card->belongsToBoard($board)) {
             throw new ModelNotFoundException('Column or card not found in this board');
+        }
+
+        if (isset($data['assigned_user_id'])) {
+            $newAssignedUser = User::find($data['assigned_user_id']);
+            if (!$this->isMember($newAssignedUser, $board)) {
+                throw new ModelNotFoundException('User not found in this board');
+            }
         }
 
         return DB::transaction(function () use ($card, $data) {
