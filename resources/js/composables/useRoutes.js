@@ -16,6 +16,7 @@ export function useRoutes() {
             destroy: () => route('boards.destroy', b()),
             edit: () => route('boards.edit', b()),
             removeInvitation: (invitation) => route('boards.removeInvitation', [b(), id(invitation)]),
+            detachMe: () => route('boards.detachMe', b()),
 
             columns: {
                 store: () => route('boards.columns.store', b()),

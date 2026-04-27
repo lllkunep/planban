@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/{board}/edit', 'edit')->name('edit');
             Route::patch('/{board}', 'update')->name('update');
             Route::delete('/{board}', 'destroy')->name('destroy');
+            Route::delete('/{board}/detach-me', 'detachMe')->name('detachMe');
         });
 
         Route::prefix('{board}/tags')->controller(TagController::class)->group(function () {

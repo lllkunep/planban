@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Enums\BoardRole;
 use App\Models\Board;
 use App\Models\Card;
+use App\Traits\ChecksBoardMembership;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class BoardController extends Controller
 {
+    use ChecksBoardMembership;
     public function create()
     {
         return Inertia::render('Board/Create');
@@ -93,6 +96,17 @@ class BoardController extends Controller
     {
         $this->authorize('owner', $board);
         $board->delete();
+
+        return redirect()->route('dashboard');
+    }
+
+    public function detachMe(Board $board)
+    {
+        if ($this->isOwner(auth()->user(), $board)) {
+            throw ValidationException::withMessages(['role' => 'Cannot detach owner']);
+        }
+
+        $board->members()->detach(auth()->id());
 
         return redirect()->route('dashboard');
     }
