@@ -23,11 +23,11 @@ const { currentBoard, boards } = useBoard();
             <Button variant="light" class="w-100 list-group-item list-group-item-action border-0" :href="routes.notifications.index()">
                 <i v-if="page.props.hasNotification" class="bi bi-bell-fill text-warning"></i><i v-else class="bi bi-bell"></i>  Notifications
             </Button>
-            <Button variant="light" class="w-100 list-group-item list-group-item-action border-0" :href="routes.boards.edit()">
-                <i class="bi bi-gear"></i> Board settings
-            </Button>
             <Button variant="light" class="w-100 list-group-item list-group-item-action border-0" :href="routes.boards.create()">
                 <i class="bi bi-clipboard-plus"></i> Create new board
+            </Button>
+            <Button v-if="currentBoard" variant="light" class="w-100 list-group-item list-group-item-action border-0" :href="routes.boards.edit()">
+                <i class="bi bi-gear"></i> Board settings
             </Button>
         </div>
         <hr>
