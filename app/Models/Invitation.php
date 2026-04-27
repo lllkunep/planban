@@ -17,4 +17,8 @@ class Invitation extends Model
     {
         return $this->board_id === $board->id;
     }
+
+    public static function getByEmail($email){
+        return self::where('email', $email)->get();
+    }
 }

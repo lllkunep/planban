@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -58,5 +59,17 @@ class User extends Authenticatable
     public static function getByEmail(string $email): ?User
     {
         return self::where('email', $email)->first();
+    }
+
+    public function checkInvitations(): void
+    {
+        DB::transaction(function () {
+            $invitations = Invitation::getByEmail($this->email);
+            foreach ($invitations as $invitation) {
+                $board = $invitation->board;
+                $board->members()->attach($this);
+                $invitation->delete();
+            }
+        });
     }
 }
