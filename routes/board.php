@@ -50,7 +50,6 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('{board}/cards')->controller(CardController::class)->group(function () {
             Route::get('/{card}', 'show')->name('cards.show');
-            Route::post('/', 'store')->name('cards.store');
             Route::patch('/{card}', 'update')->name('cards.update');
             Route::delete('/{card}', 'destroy')->name('cards.destroy');
         });

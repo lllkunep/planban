@@ -17,7 +17,7 @@ class CommentController extends AsyncController
     public function store(Request $request, Board $board, Card $card): JsonResponse
     {
         $validated = $request->validate([
-            'text' => ['required', 'string'],
+            'text' => ['required', 'string', 'max:2000'],
         ]);
 
         $comment = $card->comments()->create([
@@ -43,7 +43,7 @@ class CommentController extends AsyncController
         }
 
         $validated = $request->validate([
-            'text' => ['required', 'string'],
+            'text' => ['required', 'string', 'max:2000'],
         ]);
         $comment->update($validated);
 

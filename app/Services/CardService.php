@@ -63,7 +63,7 @@ class CardService
 
             $card->load('tags');
             $newTags = $card->tags;
-            $newTagsIds = $data['tags'] ? collect($data['tags'])->pluck('id')->toArray() : [];
+            $newTagsIds = isset($data['tags']) ? collect($data['tags'])->pluck('id')->toArray() : [];
 
             if ($card->wasChanged('name')) {
                 $actionMessages[] = "Changed name from {$oldData['name']} to {$card->name}";
