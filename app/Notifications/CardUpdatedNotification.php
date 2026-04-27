@@ -48,10 +48,13 @@ class CardUpdatedNotification extends Notification
             ];
         }
         return [
+            'type' => 'CardUpdated',
+            'title' => 'Card updated',
             'associated_user' => $associatedUserData,
             'card' => [
                 'id' => $this->card->id,
                 'name' => $this->card->name,
+                'board_id' => $this->card->column->board->id,
             ],
             'texts' => $this->texts,
         ];

@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications', [NotificationController::class, 'read'])->name('notifications.read');
 });
 
 require __DIR__.'/auth.php';

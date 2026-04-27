@@ -83,6 +83,7 @@ export function useRoutes() {
 
         notifications: {
             index: () => route('notifications.index'),
+            read:  (notification) => route('notifications.read', id(notification)),
         }
     }
 }

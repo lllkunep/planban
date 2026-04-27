@@ -117,6 +117,9 @@ class CardService
         }
 
         DB::transaction(function () use ($card, $column, $position) {
+            $authUser = auth()->user();
+            $assignedUser = $card->assignedUser;
+
             $oldColumn = $card->column;
             $card->update(['position' => $position, 'column_id' => $column->id]);
 
@@ -137,6 +140,10 @@ class CardService
             if ($oldColumn->id != $column->id) {
                 $user = auth()->user();
                 CardUpdated::dispatch($card, $user, "Moved from {$oldColumn->name} to {$column->name}");
+            }
+
+            if ($assignedUser && $assignedUser->id != $authUser->id) {
+                $assignedUser->notify(new \App\Notifications\CardUpdatedNotification($card, "Moved from {$oldColumn->name} to {$column->name}", $authUser));
             }
         });
 

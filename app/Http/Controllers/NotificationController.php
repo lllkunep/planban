@@ -13,4 +13,16 @@ class NotificationController extends Controller
             'notifications' => auth()->user()->notifications,
         ]);
     }
+
+    public function read(Request $request)
+    {
+        $notification = auth()->user()->notifications()->findOrFail($request->notification);
+        $notification->markAsRead();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Was read',
+            'data' => $notification,
+        ]);
+    }
 }

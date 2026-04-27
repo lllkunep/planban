@@ -57,6 +57,8 @@ class HandleInertiaRequests extends Middleware
             },
 
             'hasNotification' => function () use ($request) {
+                if (!$request->user()) return null;
+
                 return $request->user()->unreadNotifications->isNotEmpty();
             },
 
